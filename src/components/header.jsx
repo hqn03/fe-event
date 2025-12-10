@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { MenuIcon } from "lucide-react";
+import { DeleteIcon, MenuIcon, SearchIcon, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,23 +14,41 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/auth";
-import { NavUser } from "./nav-user";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Input } from "./ui/input";
 
 function Header({ navigationData = [], className }) {
   const { user, logout } = useAuth();
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate({});
+  const { type } = useSearch({});
+
+  const handleKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+
+    navigate({
+      from: "",
+      to: "search",
+      search: {
+        q: searchValue,
+        type: type,
+      },
+    });
+
+    // const test = api.get(`events/search?q=${searchValue}`)
+  };
 
   return (
     <header
       className={cn("bg-background sticky top-0 z-50 h-16 border-b", className)}
     >
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-6">
         {/* Logo */}
-        <a href="#" className="font-bold text-2xl">
+        <Link to={"/"} className="font-bold text-2xl">
           NHATEVENT{/* <Logo className="gap-3" /> */}
-        </a>
+        </Link>
 
         {/* Navigation */}
         <NavigationMenu className="max-md:hidden">
@@ -47,6 +65,27 @@ function Header({ navigationData = [], className }) {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
+
+        {/* SEARCH BAR */}
+        <div className="flex items-center border px-2 rounded-lg">
+          <SearchIcon size={"16"} />
+          <Input
+            className={"border-none! ring-0! shadow-none w-2xl"}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <Button
+            className={`${searchValue ? "visible" : "invisible"}`}
+            size={"icon"}
+            variant={"ghost"}
+            onClick={() => {
+              setSearchValue("");
+            }}
+          >
+            <X />
+          </Button>
+        </div>
 
         {/* Login Button */}
         {user ? (

@@ -49,8 +49,8 @@ function RouteComponent() {
           role === "Super Admin"
             ? "destructive"
             : role === "Nhân viên"
-            ? "default"
-            : "secondary";
+              ? "default"
+              : "secondary";
 
         return <Badge variant={color}>{role}</Badge>;
       },
@@ -117,22 +117,25 @@ function RouteComponent() {
 
   return (
     <div>
-      <Button
-        onClick={() => {
-          setEditingRecord({
-            id_nguoi_dung: "",
-            ho_ten: "",
-            email: "",
-            so_dien_thoai: "",
-            ngay_sinh: "",
-            gioi_tinh: "NAM",
-            id_vai_tro: "",
-            mat_khau: "",
-          });
-        }}
-      >
-        Tạo
-      </Button>
+      <div className="flex justify-end my-2">
+        <Button
+          onClick={() => {
+            setEditingRecord({
+              id_nguoi_dung: "",
+              ho_ten: "",
+              email: "",
+              so_dien_thoai: "",
+              ngay_sinh: "",
+              gioi_tinh: "NAM",
+              id_vai_tro: "",
+              mat_khau: "",
+            });
+          }}
+        >
+          Tạo người dùng
+        </Button>
+      </div>
+
       <SimpleDataTable data={users} columns={columns} />
 
       <Dialog

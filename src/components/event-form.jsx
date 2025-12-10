@@ -343,7 +343,10 @@ function EventForm({ initData }) {
                       selected={field.state.value}
                       id={field.name}
                       name={field.name}
-                      onChange={field.handleChange}
+                      onChange={(d) => {
+                        d.setHours(0, 0, 0, 0);
+                        field.handleChange(d);
+                      }}
                       dateFormat={"dd/MM/yyyy"}
                       autoComplete="off"
                     />
@@ -370,7 +373,10 @@ function EventForm({ initData }) {
                       selected={field.state.value}
                       id={field.name}
                       name={field.name}
-                      onChange={field.handleChange}
+                      onChange={(d) => {
+                        d.setHours(23, 59, 0, 0);
+                        field.handleChange(d);
+                      }}
                       dateFormat={"dd/MM/yyyy"}
                       autoComplete="off"
                     />

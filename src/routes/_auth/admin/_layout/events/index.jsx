@@ -9,15 +9,16 @@ import {
 } from "@/components/ui/dialog";
 import { getEventApprovals, updateEventApproval } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_auth/admin/_layout/events")({
+export const Route = createFileRoute("/_auth/admin/_layout/events/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate({});
   const [id, setId] = useState("");
   const { data: eventApprovals = [], isLoading } = useQuery({
     queryKey: ["event-approvals"],
@@ -52,6 +53,16 @@ function RouteComponent() {
           <div className="flex items-center gap-2">
             <Button
               onClick={() => {
+                navigate({
+                  to: row.original.ma_su_kien,
+                });
+              }}
+              variant={"outline"}
+            >
+              Xem
+            </Button>
+            <Button
+              onClick={() => {
                 if (confirm(`Xác nhận duyệt ${row.original.ma_su_kien}`)) {
                   toast.promise(
                     approveMutation.mutateAsync({
@@ -70,7 +81,9 @@ function RouteComponent() {
             >
               Duyệt
             </Button>
-            <Button onClick={() => setId(id)}>Từ chối</Button>
+            <Button variant={"destructive"} onClick={() => setId(id)}>
+              Từ chối
+            </Button>
           </div>
         );
       },

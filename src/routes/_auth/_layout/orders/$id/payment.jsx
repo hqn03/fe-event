@@ -1,3 +1,4 @@
+import PdfPreview from "@/components/pdf-preview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,6 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -42,11 +53,10 @@ function RouteComponent() {
   const [paymentMethod, setPaymentMethod] = useState("VNPAY");
 
   const { data: datVe, isLoading } = useQuery({
-    queryKey: ["order"],
+    queryKey: ["order", id],
     queryFn: () => api.get(`orders/${id}`).then(({ data }) => data),
   });
 
-  console.log(datVe);
   if (isLoading) return <div>Loading...</div>;
 
   const { phienSuKien, nguoi_dat_ve, chiTietDatVes } = datVe;
@@ -60,6 +70,10 @@ function RouteComponent() {
     });
 
     window.location.href = data;
+  };
+
+  const handlePreviewPDF = async () => {
+    const { data } = await api.get(`orders/${id}/pdf-preview`);
   };
 
   return (
@@ -190,13 +204,44 @@ function RouteComponent() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className={"flex-1"} size={"lg"} onClick={handlePayment}>
-                Thanh toán
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                  // className={"flex-1"}
+                  // size={"lg"}
+                  // onClick={handlePreviewPDF}
+                  >
+                    Thanh toán
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className={"min-w-3xl max-h-[90vh]"}>
+                  <DialogTitle>Xem trước hóa đơn</DialogTitle>
+                  <DialogDescription>
+                    <iframe
+                      src={`http://localhost:3000/api/orders/${id}/pdf-preview`}
+                      className="w-full h-[70vh]"
+                    />
+                  </DialogDescription>
+
+                  {/* <PdfPreview
+                    url={`http://localhost:3000/api/orders/${id}/pdf-preview`}
+                  /> */}
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button type="button" variant="secondary">
+                        Close
+                      </Button>
+                    </DialogClose>
+                    <Button onClick={handlePayment}>Xác nhận thanh toán</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardFooter>
           </Card>
         </div>
       </div>
+
+      {/* <PdfPreview url={`http://localhost:3000/api/orders/${id}/pdf-preview`} /> */}
     </div>
   );
 }

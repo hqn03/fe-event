@@ -115,13 +115,13 @@ function UserForm({ initalData, setEditingRecord }) {
           <DialogHeader>
             <DialogTitle>
               {initalData?.id_nguoi_dung
-                ? "Chỉnh sửa loại sự kiện"
-                : "Tạo loại sự kiện"}
+                ? "Chỉnh sửa người dùng"
+                : "Tạo người dùng"}
             </DialogTitle>
             <DialogDescription>
               {initalData?.id_nguoi_dung
-                ? "Chỉnh sửa thông tin về loại sự kiện. Nhấn lưu để hoàn tất việc chỉnh sửa"
-                : "Tạo loại sự kiện. Nhấn lưu để hoàn tất việc tạo"}
+                ? "Chỉnh sửa thông tin người dùng. Nhấn lưu để hoàn tất việc chỉnh sửa"
+                : "Tạo người dùng. Nhấn lưu để hoàn tất việc tạo"}
             </DialogDescription>
           </DialogHeader>
           <FieldSet>
@@ -342,9 +342,9 @@ function UserForm({ initalData, setEditingRecord }) {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Hủy</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">Lưu</Button>
           </DialogFooter>
         </FieldGroup>
       </form>

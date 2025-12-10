@@ -4,7 +4,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { getClientEvent } from "@/services/api";
+import api, { getClientEvent } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   createFileRoute,
@@ -21,7 +21,7 @@ import { MapPin } from "lucide-react";
 import { Calendar } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
-export const Route = createFileRoute("/_layout/$slug")({
+export const Route = createFileRoute("/_auth/admin/_layout/events/$id")({
   component: RouteComponent,
 });
 
@@ -54,17 +54,18 @@ function ChangeView({ coords }) {
 
 function RouteComponent() {
   const navigate = useNavigate({});
-  const { slug } = useParams({ from: "/_layout/$slug" });
+  const { id } = useParams({});
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event"],
-    queryFn: () => getClientEvent({ slug: slug }),
+    queryFn: () => api.get(`manager/events/${id}`).then(({ data }) => data),
   });
 
   if (isLoading) return <div>Loading....</div>;
 
+  console.log(event);
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12 px-8">
       <div className="relative col-span-12 h-96 overflow-hidden my-8">
         <img
           src={event.hinh_anh}
@@ -103,36 +104,16 @@ function RouteComponent() {
           <div className="bg-primary text-white p-4">Loại vé</div>
           {event.phienSuKiens.map((phien) => {
             return (
-              <Collapsible key={phien.id_phien_su_kien}>
+              <div key={phien.id_phien_su_kien}>
                 <div className="flex items-center justify-between gap-4 p-4 bg-primary text-white">
-                  <CollapsibleTrigger asChild>
-                    <Button variant="ghost" size="icon" className="size-8">
-                      <ChevronsUpDown />
-                      <span className="sr-only">Toggle</span>
-                    </Button>
-                  </CollapsibleTrigger>
                   <div className="flex-1 font-semibold">
                     {formatTimeRange(
                       phien.thoi_gian_bat_dau,
                       phien.thoi_gian_ket_thuc
                     )}
                   </div>
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => {
-                      navigate({
-                        to: "/ticket-booking",
-                        search: {
-                          event: event.ma_su_kien,
-                          session: phien.id_phien_su_kien,
-                        },
-                      });
-                    }}
-                  >
-                    Mua vé
-                  </Button>
                 </div>
-                <CollapsibleContent className="flex flex-col rounded-lg">
+                <div className="flex flex-col rounded-lg">
                   {phien.loaiVes.map((ve, index) => (
                     <div
                       key={ve.ten_loai_ve || ve.ten_ve}
@@ -157,8 +138,8 @@ function RouteComponent() {
                       </div>
                     </div>
                   ))}
-                </CollapsibleContent>
-              </Collapsible>
+                </div>
+              </div>
             );
           })}
         </div>

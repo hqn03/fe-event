@@ -244,7 +244,7 @@ function SessionForm({ event }) {
             </FieldGroup>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy</Button>
               </DialogClose>
               <Button
                 type="submit"
@@ -252,7 +252,7 @@ function SessionForm({ event }) {
                   phienSuKienForm.handleSubmit();
                 }}
               >
-                Save changes
+                Lưu
               </Button>
             </DialogFooter>
           </DialogContent>

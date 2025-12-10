@@ -14,7 +14,7 @@ function Buttons({ totals, save, reset, toggle }) {
           Reset
         </button> */}
         <button type="button" className="button black" onClick={() => save()}>
-          Save seat map
+          Lưu sơ đồ ghế
         </button>
       </div>
     </div>

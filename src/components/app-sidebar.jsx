@@ -24,11 +24,6 @@ import { useAuth } from "@/auth";
 
 const adminNav = [
   {
-    title: "Dashboard",
-    url: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
     title: "Nguoi dung",
     url: "/admin/users",
     icon: Group,
@@ -79,7 +74,7 @@ export function AppSidebar({ ...props }) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">NHATEVENT</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

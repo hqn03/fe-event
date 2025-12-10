@@ -36,6 +36,13 @@ const loginSchema = z.object({
     .max(32, "Mat khau khong qua 32 ki tu"),
 });
 
+// MAP [key: role, value: derection]
+const roles = new Map([
+  ["Khách hàng", ""],
+  ["Nhân viên", "/manager/events"],
+  ["Super Admin", "/admin/events"],
+]);
+
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
   const search = useSearch({ from: "/login" });
@@ -52,29 +59,12 @@ export function LoginForm({ className, ...props }) {
         navigate({
           to: directTo,
         });
+        return;
       }
-      switch (user.role) {
-        case "Khách hàng":
-          redirect({
-            to: "/",
-          });
-          break;
-        case "Nhân viên":
-          navigate({
-            to: "/manager/events",
-          });
-          break;
-        case "Super Admin":
-          navigate({
-            to: "/admin/events",
-          });
-          break;
-      }
-      console.log();
-      // console.log(data);
-      //  else {
-      //   console.log(data);
-      // }
+      navigate({
+        from: "/",
+        to: roles.get(user.role),
+      });
     },
     onError: (error) => {
       toast.error(error.response.data.message, { position: "top-center" });

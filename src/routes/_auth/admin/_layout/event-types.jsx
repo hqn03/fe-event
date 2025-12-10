@@ -96,17 +96,20 @@ function RouteComponent() {
   return (
     <div className="py-8 px-4">
       <div className="">{/* <ChartAreaInteractive /> */}</div>
-      <Button
-        onClick={() => {
-          setEditingRecord({
-            id: "",
-            ten_loai_su_kien: "",
-            duong_dan: "",
-          });
-        }}
-      >
-        Tạo
-      </Button>
+      <div className="flex justify-end">
+        <Button
+          onClick={() => {
+            setEditingRecord({
+              id: "",
+              ten_loai_su_kien: "",
+              duong_dan: "",
+            });
+          }}
+        >
+          Tạo loại sự kiện
+        </Button>
+      </div>
+
       <SimpleDataTable data={eventTypes} columns={columns} />
 
       <Dialog

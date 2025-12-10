@@ -26,9 +26,14 @@ const Cart = ({ eventId, sessionId, items }) => {
       <CardHeader></CardHeader>
       <CardContent>
         <div>
+          <div className="grid grid-cols-3">
+            <span>Loại vé</span>
+            <span>Đơn giá</span>
+            <span>Số lượng</span>
+          </div>
           {items.map((item) => {
             return (
-              <div key={item.id} className="flex justify-between">
+              <div key={item.id} className="grid grid-cols-3">
                 <span>{item.loai_ve}</span>
                 <span>{item.don_gia}</span>
                 <span>{item.so_luong}</span>
