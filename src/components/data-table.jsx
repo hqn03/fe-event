@@ -467,7 +467,7 @@ export function DataTable({ data: initialData, colums: initialColumns }) {
           >
             <Table>
               <TableHeader className="bg-muted sticky top-0 z-10">
-                {table.getHeaderGroups().map((headerGroup) => (
+                {/* {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
@@ -482,7 +482,7 @@ export function DataTable({ data: initialData, colums: initialColumns }) {
                       );
                     })}
                   </TableRow>
-                ))}
+                ))} */}
               </TableHeader>
               <TableBody className="**:data-[slot=table-cell]:first:w-8">
                 {table.getRowModel().rows?.length ? (

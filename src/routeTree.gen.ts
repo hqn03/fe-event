@@ -11,20 +11,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuccessfulVerificationRouteImport } from './routes/successful-verification'
+import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as R403RouteImport } from './routes/403'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutTicketRouteImport } from './routes/_layout/ticket'
 import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
 import { Route as LayoutSlugRouteImport } from './routes/_layout/$slug'
 import { Route as AuthTicketBookingRouteImport } from './routes/_auth/ticket-booking'
 import { Route as AuthLayoutRouteImport } from './routes/_auth/_layout'
 import { Route as AuthManagerLayoutRouteImport } from './routes/_auth/manager/_layout'
 import { Route as AuthAdminLayoutRouteImport } from './routes/_auth/admin/_layout'
+import { Route as AuthLayoutTicketScannerRouteImport } from './routes/_auth/_layout/ticket-scanner'
 import { Route as AuthAdminLayoutIndexRouteImport } from './routes/_auth/admin/_layout/index'
+import { Route as AuthManagerLayoutTicketScannerRouteImport } from './routes/_auth/manager/_layout/ticket-scanner'
 import { Route as AuthManagerLayoutOrdersRouteImport } from './routes/_auth/manager/_layout/orders'
 import { Route as AuthAdminLayoutUsersRouteImport } from './routes/_auth/admin/_layout/users'
+import { Route as AuthAdminLayoutOrdersRouteImport } from './routes/_auth/admin/_layout/orders'
 import { Route as AuthAdminLayoutEventTypesRouteImport } from './routes/_auth/admin/_layout/event-types'
 import { Route as AuthAdminLayoutDashboardRouteImport } from './routes/_auth/admin/_layout/dashboard'
 import { Route as AuthManagerLayoutEventsIndexRouteImport } from './routes/_auth/manager/_layout/events/index'
@@ -37,6 +43,16 @@ import { Route as AuthLayoutOrdersIdPaymentRouteImport } from './routes/_auth/_l
 const AuthManagerRouteImport = createFileRoute('/_auth/manager')()
 const AuthAdminRouteImport = createFileRoute('/_auth/admin')()
 
+const SuccessfulVerificationRoute = SuccessfulVerificationRouteImport.update({
+  id: '/successful-verification',
+  path: '/successful-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -70,6 +86,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutTicketRoute = LayoutTicketRouteImport.update({
+  id: '/ticket',
+  path: '/ticket',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutSearchRoute = LayoutSearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -97,11 +118,22 @@ const AuthAdminLayoutRoute = AuthAdminLayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => AuthAdminRoute,
 } as any)
+const AuthLayoutTicketScannerRoute = AuthLayoutTicketScannerRouteImport.update({
+  id: '/ticket-scanner',
+  path: '/ticket-scanner',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
 const AuthAdminLayoutIndexRoute = AuthAdminLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthAdminLayoutRoute,
 } as any)
+const AuthManagerLayoutTicketScannerRoute =
+  AuthManagerLayoutTicketScannerRouteImport.update({
+    id: '/ticket-scanner',
+    path: '/ticket-scanner',
+    getParentRoute: () => AuthManagerLayoutRoute,
+  } as any)
 const AuthManagerLayoutOrdersRoute = AuthManagerLayoutOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -110,6 +142,11 @@ const AuthManagerLayoutOrdersRoute = AuthManagerLayoutOrdersRouteImport.update({
 const AuthAdminLayoutUsersRoute = AuthAdminLayoutUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AuthAdminLayoutRoute,
+} as any)
+const AuthAdminLayoutOrdersRoute = AuthAdminLayoutOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => AuthAdminLayoutRoute,
 } as any)
 const AuthAdminLayoutEventTypesRoute =
@@ -163,16 +200,22 @@ const AuthLayoutOrdersIdPaymentRoute =
 export interface FileRoutesByFullPath {
   '/403': typeof R403Route
   '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
+  '/successful-verification': typeof SuccessfulVerificationRoute
   '/ticket-booking': typeof AuthTicketBookingRoute
   '/$slug': typeof LayoutSlugRoute
   '/search': typeof LayoutSearchRoute
+  '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutRouteWithChildren
   '/manager': typeof AuthManagerLayoutRouteWithChildren
   '/admin/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/admin/event-types': typeof AuthAdminLayoutEventTypesRoute
+  '/admin/orders': typeof AuthAdminLayoutOrdersRoute
   '/admin/users': typeof AuthAdminLayoutUsersRoute
   '/manager/orders': typeof AuthManagerLayoutOrdersRoute
+  '/manager/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/admin/': typeof AuthAdminLayoutIndexRoute
   '/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/admin/events/$id': typeof AuthAdminLayoutEventsIdRoute
@@ -184,16 +227,22 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/403': typeof R403Route
   '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
+  '/successful-verification': typeof SuccessfulVerificationRoute
   '/ticket-booking': typeof AuthTicketBookingRoute
   '/$slug': typeof LayoutSlugRoute
   '/search': typeof LayoutSearchRoute
+  '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutIndexRoute
   '/manager': typeof AuthManagerLayoutRouteWithChildren
   '/admin/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/admin/event-types': typeof AuthAdminLayoutEventTypesRoute
+  '/admin/orders': typeof AuthAdminLayoutOrdersRoute
   '/admin/users': typeof AuthAdminLayoutUsersRoute
   '/manager/orders': typeof AuthManagerLayoutOrdersRoute
+  '/manager/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/admin/events/$id': typeof AuthAdminLayoutEventsIdRoute
   '/manager/events/$eventId': typeof AuthManagerLayoutEventsEventIdRoute
@@ -207,19 +256,25 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_layout': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
+  '/successful-verification': typeof SuccessfulVerificationRoute
   '/_auth/_layout': typeof AuthLayoutRouteWithChildren
   '/_auth/ticket-booking': typeof AuthTicketBookingRoute
   '/_layout/$slug': typeof LayoutSlugRoute
   '/_layout/search': typeof LayoutSearchRoute
+  '/_layout/ticket': typeof LayoutTicketRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_auth/_layout/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/_auth/admin': typeof AuthAdminRouteWithChildren
   '/_auth/admin/_layout': typeof AuthAdminLayoutRouteWithChildren
   '/_auth/manager': typeof AuthManagerRouteWithChildren
   '/_auth/manager/_layout': typeof AuthManagerLayoutRouteWithChildren
   '/_auth/admin/_layout/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/_auth/admin/_layout/event-types': typeof AuthAdminLayoutEventTypesRoute
+  '/_auth/admin/_layout/orders': typeof AuthAdminLayoutOrdersRoute
   '/_auth/admin/_layout/users': typeof AuthAdminLayoutUsersRoute
   '/_auth/manager/_layout/orders': typeof AuthManagerLayoutOrdersRoute
+  '/_auth/manager/_layout/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/_auth/admin/_layout/': typeof AuthAdminLayoutIndexRoute
   '/_auth/_layout/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/_auth/admin/_layout/events/$id': typeof AuthAdminLayoutEventsIdRoute
@@ -233,16 +288,22 @@ export interface FileRouteTypes {
   fullPaths:
     | '/403'
     | '/login'
+    | '/sign-up'
+    | '/successful-verification'
     | '/ticket-booking'
     | '/$slug'
     | '/search'
+    | '/ticket'
     | '/'
+    | '/ticket-scanner'
     | '/admin'
     | '/manager'
     | '/admin/dashboard'
     | '/admin/event-types'
+    | '/admin/orders'
     | '/admin/users'
     | '/manager/orders'
+    | '/manager/ticket-scanner'
     | '/admin/'
     | '/orders/$id/payment'
     | '/admin/events/$id'
@@ -254,16 +315,22 @@ export interface FileRouteTypes {
   to:
     | '/403'
     | '/login'
+    | '/sign-up'
+    | '/successful-verification'
     | '/ticket-booking'
     | '/$slug'
     | '/search'
+    | '/ticket'
     | '/'
+    | '/ticket-scanner'
     | '/admin'
     | '/manager'
     | '/admin/dashboard'
     | '/admin/event-types'
+    | '/admin/orders'
     | '/admin/users'
     | '/manager/orders'
+    | '/manager/ticket-scanner'
     | '/orders/$id/payment'
     | '/admin/events/$id'
     | '/manager/events/$eventId'
@@ -276,19 +343,25 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_layout'
     | '/login'
+    | '/sign-up'
+    | '/successful-verification'
     | '/_auth/_layout'
     | '/_auth/ticket-booking'
     | '/_layout/$slug'
     | '/_layout/search'
+    | '/_layout/ticket'
     | '/_layout/'
+    | '/_auth/_layout/ticket-scanner'
     | '/_auth/admin'
     | '/_auth/admin/_layout'
     | '/_auth/manager'
     | '/_auth/manager/_layout'
     | '/_auth/admin/_layout/dashboard'
     | '/_auth/admin/_layout/event-types'
+    | '/_auth/admin/_layout/orders'
     | '/_auth/admin/_layout/users'
     | '/_auth/manager/_layout/orders'
+    | '/_auth/manager/_layout/ticket-scanner'
     | '/_auth/admin/_layout/'
     | '/_auth/_layout/orders/$id/payment'
     | '/_auth/admin/_layout/events/$id'
@@ -303,10 +376,26 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LayoutRoute: typeof LayoutRouteWithChildren
   LoginRoute: typeof LoginRoute
+  SignUpRoute: typeof SignUpRoute
+  SuccessfulVerificationRoute: typeof SuccessfulVerificationRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/successful-verification': {
+      id: '/successful-verification'
+      path: '/successful-verification'
+      fullPath: '/successful-verification'
+      preLoaderRoute: typeof SuccessfulVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -356,6 +445,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/ticket': {
+      id: '/_layout/ticket'
+      path: '/ticket'
+      fullPath: '/ticket'
+      preLoaderRoute: typeof LayoutTicketRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/search': {
       id: '/_layout/search'
       path: '/search'
@@ -398,12 +494,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminLayoutRouteImport
       parentRoute: typeof AuthAdminRoute
     }
+    '/_auth/_layout/ticket-scanner': {
+      id: '/_auth/_layout/ticket-scanner'
+      path: '/ticket-scanner'
+      fullPath: '/ticket-scanner'
+      preLoaderRoute: typeof AuthLayoutTicketScannerRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth/admin/_layout/': {
       id: '/_auth/admin/_layout/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthAdminLayoutIndexRouteImport
       parentRoute: typeof AuthAdminLayoutRoute
+    }
+    '/_auth/manager/_layout/ticket-scanner': {
+      id: '/_auth/manager/_layout/ticket-scanner'
+      path: '/ticket-scanner'
+      fullPath: '/manager/ticket-scanner'
+      preLoaderRoute: typeof AuthManagerLayoutTicketScannerRouteImport
+      parentRoute: typeof AuthManagerLayoutRoute
     }
     '/_auth/manager/_layout/orders': {
       id: '/_auth/manager/_layout/orders'
@@ -417,6 +527,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AuthAdminLayoutUsersRouteImport
+      parentRoute: typeof AuthAdminLayoutRoute
+    }
+    '/_auth/admin/_layout/orders': {
+      id: '/_auth/admin/_layout/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthAdminLayoutOrdersRouteImport
       parentRoute: typeof AuthAdminLayoutRoute
     }
     '/_auth/admin/_layout/event-types': {
@@ -479,10 +596,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutTicketScannerRoute: typeof AuthLayoutTicketScannerRoute
   AuthLayoutOrdersIdPaymentRoute: typeof AuthLayoutOrdersIdPaymentRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutTicketScannerRoute: AuthLayoutTicketScannerRoute,
   AuthLayoutOrdersIdPaymentRoute: AuthLayoutOrdersIdPaymentRoute,
 }
 
@@ -493,6 +612,7 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 interface AuthAdminLayoutRouteChildren {
   AuthAdminLayoutDashboardRoute: typeof AuthAdminLayoutDashboardRoute
   AuthAdminLayoutEventTypesRoute: typeof AuthAdminLayoutEventTypesRoute
+  AuthAdminLayoutOrdersRoute: typeof AuthAdminLayoutOrdersRoute
   AuthAdminLayoutUsersRoute: typeof AuthAdminLayoutUsersRoute
   AuthAdminLayoutIndexRoute: typeof AuthAdminLayoutIndexRoute
   AuthAdminLayoutEventsIdRoute: typeof AuthAdminLayoutEventsIdRoute
@@ -502,6 +622,7 @@ interface AuthAdminLayoutRouteChildren {
 const AuthAdminLayoutRouteChildren: AuthAdminLayoutRouteChildren = {
   AuthAdminLayoutDashboardRoute: AuthAdminLayoutDashboardRoute,
   AuthAdminLayoutEventTypesRoute: AuthAdminLayoutEventTypesRoute,
+  AuthAdminLayoutOrdersRoute: AuthAdminLayoutOrdersRoute,
   AuthAdminLayoutUsersRoute: AuthAdminLayoutUsersRoute,
   AuthAdminLayoutIndexRoute: AuthAdminLayoutIndexRoute,
   AuthAdminLayoutEventsIdRoute: AuthAdminLayoutEventsIdRoute,
@@ -526,6 +647,7 @@ const AuthAdminRouteWithChildren = AuthAdminRoute._addFileChildren(
 
 interface AuthManagerLayoutRouteChildren {
   AuthManagerLayoutOrdersRoute: typeof AuthManagerLayoutOrdersRoute
+  AuthManagerLayoutTicketScannerRoute: typeof AuthManagerLayoutTicketScannerRoute
   AuthManagerLayoutEventsEventIdRoute: typeof AuthManagerLayoutEventsEventIdRoute
   AuthManagerLayoutEventsCreateRoute: typeof AuthManagerLayoutEventsCreateRoute
   AuthManagerLayoutEventsIndexRoute: typeof AuthManagerLayoutEventsIndexRoute
@@ -533,6 +655,7 @@ interface AuthManagerLayoutRouteChildren {
 
 const AuthManagerLayoutRouteChildren: AuthManagerLayoutRouteChildren = {
   AuthManagerLayoutOrdersRoute: AuthManagerLayoutOrdersRoute,
+  AuthManagerLayoutTicketScannerRoute: AuthManagerLayoutTicketScannerRoute,
   AuthManagerLayoutEventsEventIdRoute: AuthManagerLayoutEventsEventIdRoute,
   AuthManagerLayoutEventsCreateRoute: AuthManagerLayoutEventsCreateRoute,
   AuthManagerLayoutEventsIndexRoute: AuthManagerLayoutEventsIndexRoute,
@@ -572,12 +695,14 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface LayoutRouteChildren {
   LayoutSlugRoute: typeof LayoutSlugRoute
   LayoutSearchRoute: typeof LayoutSearchRoute
+  LayoutTicketRoute: typeof LayoutTicketRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutSlugRoute: LayoutSlugRoute,
   LayoutSearchRoute: LayoutSearchRoute,
+  LayoutTicketRoute: LayoutTicketRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
@@ -589,6 +714,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LayoutRoute: LayoutRouteWithChildren,
   LoginRoute: LoginRoute,
+  SignUpRoute: SignUpRoute,
+  SuccessfulVerificationRoute: SuccessfulVerificationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

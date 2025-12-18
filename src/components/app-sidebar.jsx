@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard } from "lucide-react";
+import { ChartColumn, LayoutDashboard, ScanIcon } from "lucide-react";
 import { Group } from "lucide-react";
 import { CheckCircle } from "lucide-react";
 import { useLocation, useParams } from "@tanstack/react-router";
@@ -38,29 +38,40 @@ const adminNav = [
     url: "/admin/event-types",
     icon: CheckCircle,
   },
+  {
+    title: "Đặt vé",
+    url: "/admin/orders",
+    icon: ChartColumn,
+  },
+];
+
+const managerNav = [
+  // {
+  //   title: "Dashboard",
+  //   url: "/manager/dashboard",
+  //   icon: IconDashboard,
+  // },
+  {
+    title: "Sự kiện",
+    url: "/manager/events",
+    icon: IconListDetails,
+  },
+  {
+    title: "Đặt vé",
+    url: "/manager/orders",
+    icon: IconListDetails,
+  },
+  {
+    title: "Quét vé",
+    url: "/manager/ticket-scanner",
+    icon: ScanIcon,
+  },
 ];
 
 export function AppSidebar({ ...props }) {
   const { user } = useAuth();
   const location = useLocation();
 
-  const managerNav = [
-    {
-      title: "Dashboard",
-      url: "/manager/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Events",
-      url: "/manager/events",
-      icon: IconListDetails,
-    },
-    {
-      title: "Orders",
-      url: "/manager/orders",
-      icon: IconListDetails,
-    },
-  ];
   const nav = location.pathname.startsWith("/manager") ? managerNav : adminNav;
 
   return (

@@ -41,23 +41,27 @@ function RouteComponent() {
     },
     {
       accessorKey: "ten_su_kien",
-      header: "Event name",
-      cell:({row}) => (<div className="max-w-[400px] line-clamp-1 truncate">{row.original.ten_su_kien}</div>)
+      header: "Tên sự kiện",
+      cell: ({ row }) => (
+        <div className="max-w-[400px] line-clamp-1 truncate">
+          {row.original.ten_su_kien}
+        </div>
+      ),
     },
     {
       accessorKey: "loai_su_kien.ten_loai_su_kien",
-      header: "Loai su kien",
+      header: "Loại sự kiện",
     },
     {
       accessorKey: "ngay_bat_dau",
-      header: "Date",
+      header: "Ngày bắt đầu",
       cell: ({ row }) => {
         return <div>{format(row.original.ngay_bat_dau, "dd/MM/yyyy")}</div>;
       },
     },
     {
       accessorKey: "trang_thai",
-      header: "Status",
+      header: "Trạng thái",
       cell: ({ row }) => {
         const status = row.original.trang_thai;
         return <Badge>{status}</Badge>;
@@ -65,7 +69,7 @@ function RouteComponent() {
     },
     {
       accessorKey: "",
-      header: "Action",
+      header: "Hành động",
       cell: ({ row }) => {
         const eventId = row.original.ma_su_kien;
         return (

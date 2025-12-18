@@ -51,7 +51,7 @@ function Header({ navigationData = [], className }) {
         </Link>
 
         {/* Navigation */}
-        <NavigationMenu className="max-md:hidden">
+        {/* <NavigationMenu className="max-md:hidden">
           <NavigationMenuList className="flex-wrap justify-start gap-0">
             {navigationData.map((navItem) => (
               <NavigationMenuItem key={navItem.title}>
@@ -64,10 +64,10 @@ function Header({ navigationData = [], className }) {
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu> */}
 
         {/* SEARCH BAR */}
-        <div className="flex items-center border px-2 rounded-lg">
+        <div className="flex items-center border px-2 rounded-lg max-md:hidden">
           <SearchIcon size={"16"} />
           <Input
             className={"border-none! ring-0! shadow-none w-2xl"}
@@ -102,7 +102,7 @@ function Header({ navigationData = [], className }) {
         )}
 
         {/* Navigation for small screens */}
-        <div className="flex gap-4 md:hidden">
+        {/* <div className="flex gap-4 md:hidden">
           <Button className="rounded-lg" asChild>
             <a href="#">Login</a>
           </Button>
@@ -122,7 +122,7 @@ function Header({ navigationData = [], className }) {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </div> */}
       </div>
     </header>
   );
