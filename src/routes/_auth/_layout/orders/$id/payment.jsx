@@ -164,15 +164,7 @@ function RouteComponent() {
               renderer={renderer}
               onComplete={() => {
                 alert("Het thoi gian thanh toan, don hang se bi huy");
-                navigate({ to: -1 });
-                // navigate({
-                //   from: "",
-                //   to: "ticket-booking",
-                //   search: {
-                //     event: phienSuKien.su_kien.ma_su_kien,
-                //     session: datVe.id_phien_su_kien,
-                //   },
-                // });
+                navigate({ from: "/", to: "/" });
               }}
             />
           </Card>
