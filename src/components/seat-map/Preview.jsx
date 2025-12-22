@@ -67,7 +67,6 @@ const Preview = ({ seatData, orderedData = [] }) => {
   };
 
   const rows = Array.from(seatData?.entries());
-
   const onExpire = (id) => {
     occupiedSeats.delete(id);
   };

@@ -26,6 +26,7 @@ import { Route as AuthLayoutRouteImport } from './routes/_auth/_layout'
 import { Route as AuthManagerLayoutRouteImport } from './routes/_auth/manager/_layout'
 import { Route as AuthAdminLayoutRouteImport } from './routes/_auth/admin/_layout'
 import { Route as AuthLayoutTicketScannerRouteImport } from './routes/_auth/_layout/ticket-scanner'
+import { Route as AuthLayoutProfileRouteImport } from './routes/_auth/_layout/profile'
 import { Route as AuthAdminLayoutIndexRouteImport } from './routes/_auth/admin/_layout/index'
 import { Route as AuthManagerLayoutTicketScannerRouteImport } from './routes/_auth/manager/_layout/ticket-scanner'
 import { Route as AuthManagerLayoutOrdersRouteImport } from './routes/_auth/manager/_layout/orders'
@@ -123,6 +124,11 @@ const AuthLayoutTicketScannerRoute = AuthLayoutTicketScannerRouteImport.update({
   path: '/ticket-scanner',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+const AuthLayoutProfileRoute = AuthLayoutProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
 const AuthAdminLayoutIndexRoute = AuthAdminLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof LayoutSearchRoute
   '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/profile': typeof AuthLayoutProfileRoute
   '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutRouteWithChildren
   '/manager': typeof AuthManagerLayoutRouteWithChildren
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/search': typeof LayoutSearchRoute
   '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/profile': typeof AuthLayoutProfileRoute
   '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutIndexRoute
   '/manager': typeof AuthManagerLayoutRouteWithChildren
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/_layout/search': typeof LayoutSearchRoute
   '/_layout/ticket': typeof LayoutTicketRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_auth/_layout/profile': typeof AuthLayoutProfileRoute
   '/_auth/_layout/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/_auth/admin': typeof AuthAdminRouteWithChildren
   '/_auth/admin/_layout': typeof AuthAdminLayoutRouteWithChildren
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/ticket'
     | '/'
+    | '/profile'
     | '/ticket-scanner'
     | '/admin'
     | '/manager'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/ticket'
     | '/'
+    | '/profile'
     | '/ticket-scanner'
     | '/admin'
     | '/manager'
@@ -351,6 +362,7 @@ export interface FileRouteTypes {
     | '/_layout/search'
     | '/_layout/ticket'
     | '/_layout/'
+    | '/_auth/_layout/profile'
     | '/_auth/_layout/ticket-scanner'
     | '/_auth/admin'
     | '/_auth/admin/_layout'
@@ -501,6 +513,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutTicketScannerRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
+    '/_auth/_layout/profile': {
+      id: '/_auth/_layout/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthLayoutProfileRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth/admin/_layout/': {
       id: '/_auth/admin/_layout/'
       path: '/'
@@ -596,11 +615,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutProfileRoute: typeof AuthLayoutProfileRoute
   AuthLayoutTicketScannerRoute: typeof AuthLayoutTicketScannerRoute
   AuthLayoutOrdersIdPaymentRoute: typeof AuthLayoutOrdersIdPaymentRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutProfileRoute: AuthLayoutProfileRoute,
   AuthLayoutTicketScannerRoute: AuthLayoutTicketScannerRoute,
   AuthLayoutOrdersIdPaymentRoute: AuthLayoutOrdersIdPaymentRoute,
 }

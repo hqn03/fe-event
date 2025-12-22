@@ -18,6 +18,14 @@ import React, { useState } from "react";
 import { useAuth } from "@/auth";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { Input } from "./ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import {
+  IconDashboard,
+  IconDotsVertical,
+  IconLogout,
+  IconUserCircle,
+} from "@tabler/icons-react";
 
 function Header({ navigationData = [], className }) {
   const { user, logout } = useAuth();
@@ -89,12 +97,48 @@ function Header({ navigationData = [], className }) {
 
         {/* Login Button */}
         {user ? (
-          <div className="flex items-center gap-8">
-            <div>{user.fullname}</div>
-            <Button className="rounded-lg max-md:hidden" onClick={logout}>
-              Logout
-            </Button>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center gap-4">
+                <Avatar>
+                  <AvatarImage src={user.anh_dai_dien} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div>{user.ho_ten}</div>
+                <IconDotsVertical className="ml-auto size-4" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigate({ to: "/profile" });
+                }}
+              >
+                <IconUserCircle />
+                Tài khoản
+              </DropdownMenuItem>
+              {user.role === "Nhân viên" && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    navigate({ to: "/manager/events" });
+                  }}
+                >
+                  <IconDashboard />
+                  Trang quản lý
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuItem onClick={logout}>
+                <IconLogout />
+                Log out
+              </DropdownMenuItem>
+              {/* <div className="flex items-center gap-2">
+                <Button className="rounded-lg max-md:hidden" onClick={logout}>
+                  Logout
+                </Button>
+              </div> */}
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Button className="rounded-lg max-md:hidden" asChild>
             <Link to={"/login"}>Login</Link>

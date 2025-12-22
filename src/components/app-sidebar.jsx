@@ -55,11 +55,33 @@ const managerNav = [
     title: "Sự kiện",
     url: "/manager/events",
     icon: IconListDetails,
-  },
-  {
-    title: "Đặt vé",
-    url: "/manager/orders",
-    icon: IconListDetails,
+    children: [
+      {
+        title: "Thông tin sự kiện",
+        url: "/manager/events/$eventId",
+        search: { type: "edit" },
+      },
+      {
+        title: "Phiên sự kiện",
+        url: "/manager/events/$eventId",
+        search: { type: "sessions" },
+      },
+      {
+        title: "Vé",
+        url: "/manager/events/$eventId",
+        search: { type: "tickets" },
+      },
+      {
+        title: "Sơ đồ ghế",
+        url: "/manager/events/$eventId",
+        search: { type: "seats" },
+      },
+      {
+        title: "Thống kê",
+        url: "/manager/events/$eventId",
+        search: { type: "orders" },
+      },
+    ],
   },
   {
     title: "Quét vé",

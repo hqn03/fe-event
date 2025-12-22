@@ -96,7 +96,11 @@ function RouteComponent() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  console.log("edit ", eventId);
+                  navigate({
+                    to: "$eventId",
+                    params: { eventId: eventId },
+                    search: { type: "edit" },
+                  });
                 }}
               >
                 Edit event
@@ -105,12 +109,8 @@ function RouteComponent() {
                 onClick={() => {
                   navigate({
                     to: "$eventId",
-                    params: {
-                      eventId: eventId,
-                    },
-                    search: {
-                      type: "sessions",
-                    },
+                    params: { eventId: eventId },
+                    search: { type: "sessions" },
                   });
                 }}
               >
@@ -120,12 +120,8 @@ function RouteComponent() {
                 onClick={() => {
                   navigate({
                     to: "$eventId",
-                    params: {
-                      eventId: eventId,
-                    },
-                    search: {
-                      type: "tickets",
-                    },
+                    params: { eventId: eventId },
+                    search: { type: "tickets" },
                   });
                 }}
               >
@@ -135,12 +131,8 @@ function RouteComponent() {
                 onClick={() => {
                   navigate({
                     to: "$eventId",
-                    params: {
-                      eventId: eventId,
-                    },
-                    search: {
-                      type: "seats",
-                    },
+                    params: { eventId: eventId },
+                    search: { type: "seats" },
                   });
                 }}
               >
