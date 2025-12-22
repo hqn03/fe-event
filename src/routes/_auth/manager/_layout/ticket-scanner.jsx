@@ -47,7 +47,7 @@ function RouteComponent() {
         status: "CHECKED_IN",
       })
       .then(({ data }) => {
-        setTicket(data);
+        setTicket((prev) => ({ ...prev, trang_thai: data.trang_thai }));
         toast.success("Cập nhật thành công", { position: "top-center" });
       });
   };
@@ -58,7 +58,7 @@ function RouteComponent() {
         status: "CHUA_CHECK_IN",
       })
       .then(({ data }) => {
-        setTicket(data);
+        setTicket((prev) => ({ ...prev, trang_thai: data.trang_thai }));
         toast.success("Cập nhật thành công", { position: "top-center" });
       });
   };

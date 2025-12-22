@@ -136,7 +136,7 @@
 }
 
 #map { 
-    @apply h-72 rounded-xl
+  @apply h-52 rounded-xl
 }
 
 .react-datepicker-popper{

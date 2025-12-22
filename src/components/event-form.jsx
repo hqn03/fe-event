@@ -93,7 +93,27 @@ function EventForm({ initData }) {
           hinh_anh: "",
           id_loai_su_kien: "",
           ten_su_kien: "",
-          mo_ta: "",
+          mo_ta: `## Giới thiệu sự kiện
+Sự kiện [TEN_SU_KIEN] được tổ chức nhằm [MUC_DICH_SU_KIEN], hướng đến [DOI_TUONG_THAM_GIA], mang lại [GIA_TRI_MANG_LAI].
+
+## Thời gian và địa điểm
+Sự kiện diễn ra từ [THOI_GIAN_BAT_DAU] đến [THOI_GIAN_KET_THUC] tại [DIA_DIEM_TO_CHUC].
+
+## Nội dung chương trình
+Chương trình bao gồm các hoạt động chính như [NOI_DUNG_CHINH], được sắp xếp theo kế hoạch đã định.
+
+## Lịch trình
+Lịch trình dự kiến được triển khai theo các mốc thời gian [LICH_TRINH_CHUONG_TRINH].
+
+## Khách mời
+Sự kiện có sự tham gia của các khách mời gồm [KHACH_MOI].
+
+## Đối tượng tham gia
+Đối tượng tham gia bao gồm [DOI_TUONG_THAM_GIA].
+
+## Thông tin bổ sung
+[THONG_TIN_BO_SUNG]
+`,
           ngay_bat_dau: "",
           ngay_ket_thuc: "",
           dia_diem: "",
@@ -498,7 +518,7 @@ function EventForm({ initData }) {
                 <Field>
                   <FieldLabel htmlFor={field.name}>Mô tả</FieldLabel>
                   <MDXEditor
-                    className={`prose border rounded-lg min-w-full`}
+                    className={`prose border rounded-lg min-w-full max-h-[400px] overflow-scroll`}
                     markdown={description.current}
                     onChange={(v) => (description.current = v)}
                     plugins={[

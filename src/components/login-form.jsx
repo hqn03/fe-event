@@ -21,7 +21,7 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 // import { login } from "@/services/api";
 import { toast } from "sonner";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useAuth } from "@/auth";
 import { redirect } from "@tanstack/react-router";
 
@@ -93,7 +93,7 @@ export function LoginForm({ className, ...props }) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardTitle className="text-xl">Chào mừng quay trở lại</CardTitle>
           {/* <CardDescription>
             Login with your Apple or Google account
           </CardDescription> */}
@@ -163,12 +163,12 @@ export function LoginForm({ className, ...props }) {
                   return (
                     <Field>
                       <div className="flex items-center">
-                        <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>Mật khẩu</FieldLabel>
                         <a
                           href="#"
                           className="ml-auto text-sm underline-offset-4 hover:underline"
                         >
-                          Forgot your password?
+                          Quên mật khẩu?
                         </a>
                       </div>
                       <Input
@@ -191,20 +191,20 @@ export function LoginForm({ className, ...props }) {
 
               <Field>
                 <Button type="submit" disabled={mutation.isPending}>
-                  {mutation.isPending ? "Peding..." : "Login"}
+                  {mutation.isPending ? "Đang tải..." : "Đăng nhập"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Không có tài khoản <Link to={"/sign-up"}>Đăng ký</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
+      {/* <FieldDescription className="px-6 text-center">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+      </FieldDescription> */}
     </div>
   );
 }

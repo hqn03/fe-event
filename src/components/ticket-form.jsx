@@ -64,8 +64,10 @@ function TicketForm() {
     onSubmit: async ({ value }) => {
       try {
         if (value.id_loai_ve) {
-          const { data } = await api.put(`tickets/${value.id_loai_ve}`, value);
-          console.log(data);
+          const { data } = await api.put(
+            `manager/events/${eventId}/tickets`,
+            value
+          );
           queryClient.setQueryData(["sessions-tickets"], (prev) =>
             prev.map((session) => {
               return session.id_phien_su_kien !== data.id_phien_su_kien
@@ -78,7 +80,7 @@ function TicketForm() {
                   };
             })
           );
-          toast.success("Chỉnh sửa vé thành công", {
+          toast.success("Cập nhật vé thành công", {
             position: "top-center",
           });
           return;
@@ -135,7 +137,7 @@ function TicketForm() {
     if (!confirm(`Bạn có muốn xóa vé ${ticket.ten_ve}`)) return;
 
     api
-      .delete(`tickets/${ticket.id_loai_ve}`)
+      .delete(`manager/events/${eventId}/tickets/${ticket.id_loai_ve}`)
       .then(({ data }) => {
         toast.success("Xóa vé thành công", { position: "top-center" });
         queryClient.setQueryData(["sessions-tickets"], (prev) =>
@@ -233,12 +235,12 @@ function TicketForm() {
             <DialogHeader>
               <DialogTitle>
                 {loaiVeForm.getFieldValue("id_loai_ve")
-                  ? "Chỉnh sửa vé"
+                  ? "Cập nhật vé"
                   : "Tạo vé"}
               </DialogTitle>
               <DialogDescription>
                 {loaiVeForm.getFieldValue("id_loai_ve")
-                  ? "Chỉnh sửa vé, nhấn lưu để hoàn tất."
+                  ? "Cập nhật vé, nhấn lưu để cập nhật."
                   : "Tạo vé mới, nhấn lưu để tạo."}
               </DialogDescription>
             </DialogHeader>
@@ -378,14 +380,9 @@ function TicketForm() {
             </FieldSet>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy</Button>
               </DialogClose>
-              <Button
-                type="submit"
-                onClick={() => {
-                  loaiVeForm.handleSubmit();
-                }}
-              >
+              <Button type="submit" onClick={loaiVeForm.handleSubmit}>
                 Lưu
               </Button>
             </DialogFooter>

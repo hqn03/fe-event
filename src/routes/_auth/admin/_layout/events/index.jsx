@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { formatDateTime } from "@/lib/utils";
 import { getEventApprovals, updateEventApproval } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -43,7 +44,10 @@ function RouteComponent() {
     },
     {
       accessorKey: "ngay_tao",
-      header: "Ngày gửi",
+      header: "Ngày gửi yêu cầu",
+      cell: ({ row }) => {
+        return <div>{formatDateTime(row.getValue("ngay_tao"))}</div>;
+      },
     },
     {
       header: "Hành động",
@@ -53,9 +57,7 @@ function RouteComponent() {
           <div className="flex items-center gap-2">
             <Button
               onClick={() => {
-                navigate({
-                  to: row.original.ma_su_kien,
-                });
+                navigate({ to: row.original.ma_su_kien });
               }}
               variant={"outline"}
             >

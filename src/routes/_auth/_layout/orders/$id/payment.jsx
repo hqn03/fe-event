@@ -57,7 +57,14 @@ function RouteComponent() {
 
   const { data: datVe, isLoading } = useQuery({
     queryKey: ["order", id],
-    queryFn: () => api.get(`orders/${id}`).then(({ data }) => data),
+    queryFn: () =>
+      api
+        .get(`orders/${id}`)
+        .then(({ data }) => data)
+        .catch((error) => {
+          alert(error.response.data);
+          navigate({ from: "/", to: "/" });
+        }),
   });
 
   if (isLoading) return <div>Loading...</div>;

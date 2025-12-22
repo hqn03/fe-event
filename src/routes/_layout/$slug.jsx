@@ -94,7 +94,9 @@ function RouteComponent() {
 
         <div>
           <div className="text-xl font-semibold uppercase">Mô tả:</div>
-          <ReactMarkdown>{event.mo_ta}</ReactMarkdown>
+          <div className="prose max-h-[400px] overflow-scroll">
+            <ReactMarkdown>{event.mo_ta}</ReactMarkdown>
+          </div>
         </div>
 
         <Separator className={"my-8"} />
@@ -165,7 +167,7 @@ function RouteComponent() {
 
         <Separator className={"my-8"} />
 
-        <div className="max-w-2/3 grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-8">
           <div>
             <div className="text-xl font-semibold mb-1 uppercase">Địa điểm</div>
             <span>{event.dia_diem}</span>

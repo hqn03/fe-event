@@ -93,12 +93,14 @@ function EventTypeForm({ initalData, setEditingRecord }) {
         <FieldGroup>
           <DialogHeader>
             <DialogTitle>
-              {initalData?.id ? "Chỉnh sửa loại sự kiện" : "Tạo loại sự kiện"}
+              {initalData?.id
+                ? "Cập nhật danh mục sự kiện"
+                : "Tạo danh mục sự kiện"}
             </DialogTitle>
             <DialogDescription>
               {initalData?.id
-                ? "Chỉnh sửa thông tin về loại sự kiện. Nhấn lưu để hoàn tất việc chỉnh sửa"
-                : "Tạo loại sự kiện. Nhấn lưu để hoàn tất việc tạo"}
+                ? "Cập nhật danh mục sự kiện. Nhấn lưu để hoàn tất việc cập nhật."
+                : "Tạo danh mục sự kiện. Nhấn lưu để hoàn tất việc tạo."}
             </DialogDescription>
           </DialogHeader>
           <form.Field
@@ -145,9 +147,9 @@ function EventTypeForm({ initalData, setEditingRecord }) {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Hủy</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">Lưu</Button>
           </DialogFooter>
         </FieldGroup>
       </form>

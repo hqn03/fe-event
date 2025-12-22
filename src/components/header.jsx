@@ -140,9 +140,24 @@ function Header({ navigationData = [], className }) {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button className="rounded-lg max-md:hidden" asChild>
-            <Link to={"/login"}>Login</Link>
-          </Button>
+          <div>
+            <Button
+              variant={"link"}
+              onClick={() => {
+                navigate({ from: "/", to: "sign-up" });
+              }}
+            >
+              Đăng ký
+            </Button>
+            <Button
+              variant={"link"}
+              onClick={() => {
+                navigate({ from: "/", to: "login" });
+              }}
+            >
+              Đăng nhập
+            </Button>
+          </div>
         )}
 
         {/* Navigation for small screens */}
