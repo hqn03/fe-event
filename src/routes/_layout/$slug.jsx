@@ -63,6 +63,8 @@ function RouteComponent() {
 
   if (isLoading) return <div>Loading....</div>;
 
+  console.log(event);
+
   return (
     <div className="grid grid-cols-12">
       <div className="relative col-span-12 h-96 overflow-hidden my-8">
@@ -94,7 +96,7 @@ function RouteComponent() {
 
         <div>
           <div className="text-xl font-semibold uppercase">Mô tả:</div>
-          <div className="prose max-h-[400px] overflow-scroll">
+          <div className="prose max-h-[400px] overflow-y-scroll min-w-full">
             <ReactMarkdown>{event.mo_ta}</ReactMarkdown>
           </div>
         </div>
@@ -135,7 +137,25 @@ function RouteComponent() {
                   </Button>
                 </div>
                 <CollapsibleContent className="flex flex-col rounded-lg">
-                  {phien.loaiVes.map((ve, index) => (
+                  {event.loaiVes[phien.id_phien_su_kien].map((i, index) => (
+                    <div
+                      key={i.ten_ve}
+                      className={`flex p-4 bg-gray-300 ${
+                        index % 2 || "bg-neutral-200!"
+                      }`}
+                    >
+                      <div className="flex-1">{i.ten_ve}</div>
+                      <div>
+                        <span>
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(i.gia_ve)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  {/* {phien.loaiVes.map((ve, index) => (
                     <div
                       key={ve.ten_loai_ve || ve.ten_ve}
                       className={`flex p-4 ${
@@ -158,7 +178,7 @@ function RouteComponent() {
                         )}
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                 </CollapsibleContent>
               </Collapsible>
             );

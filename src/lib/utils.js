@@ -24,3 +24,7 @@ export const formatDateTime = (date) =>
     month: "2-digit",
     year: "numeric",
   });
+
+export function formatVND(currency) {
+  return currency?.toLocaleString("vi-VN");
+}
