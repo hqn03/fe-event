@@ -27,6 +27,7 @@ import { Route as AuthManagerLayoutRouteImport } from './routes/_auth/manager/_l
 import { Route as AuthAdminLayoutRouteImport } from './routes/_auth/admin/_layout'
 import { Route as AuthLayoutTicketScannerRouteImport } from './routes/_auth/_layout/ticket-scanner'
 import { Route as AuthLayoutProfileRouteImport } from './routes/_auth/_layout/profile'
+import { Route as AuthLayoutMyTicketsRouteImport } from './routes/_auth/_layout/my-tickets'
 import { Route as AuthAdminLayoutIndexRouteImport } from './routes/_auth/admin/_layout/index'
 import { Route as AuthManagerLayoutTicketScannerRouteImport } from './routes/_auth/manager/_layout/ticket-scanner'
 import { Route as AuthManagerLayoutOrdersRouteImport } from './routes/_auth/manager/_layout/orders'
@@ -129,6 +130,11 @@ const AuthLayoutProfileRoute = AuthLayoutProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+const AuthLayoutMyTicketsRoute = AuthLayoutMyTicketsRouteImport.update({
+  id: '/my-tickets',
+  path: '/my-tickets',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
 const AuthAdminLayoutIndexRoute = AuthAdminLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof LayoutSearchRoute
   '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/my-tickets': typeof AuthLayoutMyTicketsRoute
   '/profile': typeof AuthLayoutProfileRoute
   '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutRouteWithChildren
@@ -241,6 +248,7 @@ export interface FileRoutesByTo {
   '/search': typeof LayoutSearchRoute
   '/ticket': typeof LayoutTicketRoute
   '/': typeof LayoutIndexRoute
+  '/my-tickets': typeof AuthLayoutMyTicketsRoute
   '/profile': typeof AuthLayoutProfileRoute
   '/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/admin': typeof AuthAdminLayoutIndexRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/_layout/search': typeof LayoutSearchRoute
   '/_layout/ticket': typeof LayoutTicketRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_auth/_layout/my-tickets': typeof AuthLayoutMyTicketsRoute
   '/_auth/_layout/profile': typeof AuthLayoutProfileRoute
   '/_auth/_layout/ticket-scanner': typeof AuthLayoutTicketScannerRoute
   '/_auth/admin': typeof AuthAdminRouteWithChildren
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/ticket'
     | '/'
+    | '/my-tickets'
     | '/profile'
     | '/ticket-scanner'
     | '/admin'
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/ticket'
     | '/'
+    | '/my-tickets'
     | '/profile'
     | '/ticket-scanner'
     | '/admin'
@@ -362,6 +373,7 @@ export interface FileRouteTypes {
     | '/_layout/search'
     | '/_layout/ticket'
     | '/_layout/'
+    | '/_auth/_layout/my-tickets'
     | '/_auth/_layout/profile'
     | '/_auth/_layout/ticket-scanner'
     | '/_auth/admin'
@@ -520,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutProfileRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
+    '/_auth/_layout/my-tickets': {
+      id: '/_auth/_layout/my-tickets'
+      path: '/my-tickets'
+      fullPath: '/my-tickets'
+      preLoaderRoute: typeof AuthLayoutMyTicketsRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
     '/_auth/admin/_layout/': {
       id: '/_auth/admin/_layout/'
       path: '/'
@@ -615,12 +634,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutMyTicketsRoute: typeof AuthLayoutMyTicketsRoute
   AuthLayoutProfileRoute: typeof AuthLayoutProfileRoute
   AuthLayoutTicketScannerRoute: typeof AuthLayoutTicketScannerRoute
   AuthLayoutOrdersIdPaymentRoute: typeof AuthLayoutOrdersIdPaymentRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutMyTicketsRoute: AuthLayoutMyTicketsRoute,
   AuthLayoutProfileRoute: AuthLayoutProfileRoute,
   AuthLayoutTicketScannerRoute: AuthLayoutTicketScannerRoute,
   AuthLayoutOrdersIdPaymentRoute: AuthLayoutOrdersIdPaymentRoute,

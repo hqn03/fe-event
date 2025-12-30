@@ -190,13 +190,17 @@ function TicketForm() {
                       <TableCell>
                         <div className="flex gap-4">
                           <Button
+                            variant={"link"}
                             onClick={() => {
                               handleEditTicket(ticket);
                             }}
                           >
                             Sửa
                           </Button>
-                          <Button onClick={() => handleDeleteTicket(ticket)}>
+                          <Button
+                            variant={"link"}
+                            onClick={() => handleDeleteTicket(ticket)}
+                          >
                             Xóa
                           </Button>
                         </div>

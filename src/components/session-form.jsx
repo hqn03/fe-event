@@ -138,7 +138,7 @@ function SessionForm({ event }) {
         return (
           <div
             key={phienSuKien.id_phien_su_kien}
-            className="flex flex-col gap-2 border rounded-lg p-4 mt-4"
+            className="flex flex-col gap-2 border rounded-lg p-2 mt-4"
           >
             <div className="flex items-center justify-between gap-4 px-4">
               <h4 className=" font-semibold flex-1">

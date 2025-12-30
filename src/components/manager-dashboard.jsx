@@ -205,7 +205,10 @@ const ManagerDashboardOrder = ({ eventId }) => {
               dataKey="ngay"
               type="category"
               interval={0}
-              padding={{ left: 0, right: 0 }}
+              // padding={{ left: 0, right: 0 }}
+              textAnchor={"end"}
+              angle={-45}
+              height={80}
             />
             <YAxis yAxisId="left" />
             <YAxis yAxisId="right" orientation="right" />

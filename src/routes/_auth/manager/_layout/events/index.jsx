@@ -1,6 +1,7 @@
 import { deleteEvent, getManagerEvents, publishEvent } from "@/services/api";
 import {
   createFileRoute,
+  Link,
   useLoaderData,
   useNavigate,
 } from "@tanstack/react-router";
@@ -21,12 +22,29 @@ import { MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { useMemo, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/_auth/manager/_layout/events/")({
   component: RouteComponent,
 });
 
+const STATUS_COLORS = {
+  DANG_XU_LY: "text-black-600",
+  SAP_DIEN_RA: "text-green-600",
+  KET_THUC: "text-red-600",
+};
+
 function RouteComponent() {
+  const [status, setStatus] = useState("ALL");
   const queryClient = useQueryClient();
   const navigate = useNavigate({ from: "/manager/events/" });
 
@@ -34,6 +52,12 @@ function RouteComponent() {
     queryKey: ["events"],
     queryFn: getManagerEvents,
   });
+
+  const filteredEvents = useMemo(() => {
+    if (status === "ALL") return events;
+
+    return events.filter((s) => s.trang_thai === status);
+  }, [events, status]);
   const columns = [
     {
       accessorKey: "ma_su_kien",
@@ -43,9 +67,14 @@ function RouteComponent() {
       accessorKey: "ten_su_kien",
       header: "Tên sự kiện",
       cell: ({ row }) => (
-        <div className="max-w-[400px] line-clamp-1 truncate">
+        <Link
+          to={"$eventId"}
+          params={{ eventId: row.original.ma_su_kien }}
+          search={{ type: "edit" }}
+          className="max-w-[400px] line-clamp-1 truncate"
+        >
           {row.original.ten_su_kien}
-        </div>
+        </Link>
       ),
     },
     {
@@ -64,7 +93,11 @@ function RouteComponent() {
       header: "Trạng thái",
       cell: ({ row }) => {
         const status = row.original.trang_thai;
-        return <Badge>{status}</Badge>;
+        return (
+          <Badge variant={"secondary"} className={`${STATUS_COLORS[status]}`}>
+            {status}
+          </Badge>
+        );
       },
     },
     {
@@ -181,21 +214,36 @@ function RouteComponent() {
   });
 
   if (isLoading) return <div>Loading....</div>;
+  console.log(filteredEvents);
 
   return (
     <div className="p-4">
       <div className="flex justify-end mb-4">
         <Button
           onClick={() => {
-            navigate({
-              to: "create",
-            });
+            navigate({ to: "create" });
           }}
         >
           Tạo sự kiện
         </Button>
       </div>
-      <SimpleDataTable data={events} columns={columns} />
+      <div className="flex justify-end mb-4">
+        <Select value={status} onValueChange={setStatus}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Tất cả" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="ALL">Tất cả</SelectItem>
+              <SelectItem value="DANG_XU_LY">Đang xử lý</SelectItem>
+              <SelectItem value="SAP_DIEN_RA">Sắp diễn ra</SelectItem>
+              <SelectItem value="KET_THUC">Kết thúc</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <SimpleDataTable data={filteredEvents} columns={columns} />
     </div>
   );
 }
