@@ -17,13 +17,17 @@ import {
 } from "recharts";
 import { Input } from "./ui/input";
 import { formatDate } from "@/lib/utils";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { TestDataTable } from "./simple-data-table";
 import { Field, FieldLabel } from "./ui/field";
+import html2canvas from "html2canvas-pro";
+import jsPDF from "jspdf";
+import { autoTable } from "jspdf-autotable";
+import "@/fonts/Roboto-Regular-normal";
 
 const GENDER_COLORS = {
   Nam: "#2563eb", // xanh
@@ -43,6 +47,56 @@ const mapGender = (value) => {
       return value;
   }
 };
+
+const renderLabel = (props) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent, value, stroke } =
+    props;
+
+  const RADIAN = Math.PI / 180;
+
+  // % bên trong
+  const rIn = innerRadius + (outerRadius - innerRadius) / 2;
+  const xIn = cx + rIn * Math.cos(-midAngle * RADIAN);
+  const yIn = cy + rIn * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <>
+      {/* % inside */}
+      {percent > 0.05 && (
+        <text
+          x={xIn}
+          y={yIn}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={12}
+        >
+          {(percent * 100).toFixed(0)}%
+        </text>
+      )}
+    </>
+  );
+};
+const CustomLegend = ({ payload }) => (
+  <ul style={{ display: "flex", gap: 16, justifyContent: "center" }}>
+    {payload.map((item, index) => {
+      return (
+        <li
+          key={index}
+          style={{ display: "flex", alignItems: "center", gap: 6 }}
+        >
+          <span
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: `${item.payload.stroke}`, // màu theo stroke
+            }}
+          />
+          <span>{item.value}</span>
+        </li>
+      );
+    })}
+  </ul>
+);
 
 const columns = [
   {
@@ -72,6 +126,7 @@ const columns = [
 ];
 
 const ManagerDashboardOrder = ({ eventId }) => {
+  const ref_1 = useRef();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -141,96 +196,154 @@ const ManagerDashboardOrder = ({ eventId }) => {
     so_ve: i.so_ve,
   }));
 
-  const data1 = [
-    { name: "T1", ve: 120, doanhThu: 2400000 },
-    { name: "T2", ve: 180, doanhThu: 3600000 },
-    { name: "T3", ve: 150, doanhThu: 3000000 },
-  ];
+  const exportPDF = async () => {
+    try {
+      const pdf = new jsPDF("p", "mm", "a4");
+      pdf.setFont("Roboto-Regular", "normal");
+
+      const canvas = await html2canvas(ref_1.current, {
+        scale: 2,
+        backgroundColor: "#fff",
+      });
+
+      pdf.addImage(canvas, "PNG", 10, 10, 180, 90);
+
+      const { data } = await api.get(`/manager/events/${eventId}/orders`, {
+        params: { limit: "all" },
+      });
+
+      const rows = data.items.map((i) => [
+        i.ma_don_hang,
+        i.ho_ten,
+        i.so_ve,
+        Number(i.tong_tien).toLocaleString("vi-VN") + " đ",
+        i.ngay_tao,
+      ]);
+
+      autoTable(pdf, {
+        startY: 110,
+        head: [["Mã đơn", "Khách", "Số vé", "Tổng tiền", "Ngày tạo"]],
+        body: rows,
+        styles: {
+          fontSize: 9,
+          font: "Roboto-Regular",
+          fontStyle: "normal",
+        },
+        headStyles: {
+          fillColor: [240, 240, 240],
+          textColor: [0, 0, 0],
+          font: "Roboto-Regular",
+          fontStyle: "normal",
+        },
+      });
+      pdf.save("report.pdf");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="py-8">
-      <div className="grid grid-cols-2 mb-16">
-        <div className="max-h-[200px]">
-          <h3 className="mb-2 text-center font-semibold">
-            Thống kê theo giới tính
-          </h3>
-          <ResponsiveContainer width={"100%"} height={"100%"}>
-            <PieChart>
-              <Pie
-                data={genderData}
-                dataKey={"so_ve"}
-                nameKey={"gioi_tinh"}
-                innerRadius={0}
-                label
-              >
-                {genderData.map((item, index) => (
-                  <Cell
-                    key={index}
-                    fill={GENDER_COLORS[item.gioi_tinh] ?? "#d1d5db"}
+      <div ref={ref_1}>
+        <div className="grid grid-cols-2 mb-16">
+          <div className="max-h-[200px]">
+            <h3 className="mb-2 text-center font-semibold">
+              Thống kê theo giới tính
+            </h3>
+            <ResponsiveContainer width={"100%"} height={"100%"}>
+              <PieChart>
+                <Pie
+                  data={genderData}
+                  dataKey={"so_ve"}
+                  nameKey={"gioi_tinh"}
+                  outerRadius={80}
+                  label={renderLabel}
+                >
+                  {genderData.map((item, index) => (
+                    <Cell
+                      key={index}
+                      fill="#fff"
+                      stroke={GENDER_COLORS[item.gioi_tinh]}
+                      strokeWidth={3} // border
+                    />
+                  ))}
+                </Pie>
+                <Legend content={<CustomLegend />} />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="max-h-[200px]">
+            <h3 className="mb-2 text-center font-semibold">
+              Thống kê theo nhóm tuổi
+            </h3>
+            <ResponsiveContainer width={"100%"} height={"100%"}>
+              <BarChart data={ageQuery.data}>
+                <XAxis dataKey="nhom_tuoi" name="Nhóm tuổi">
+                  <Label
+                    value="Nhóm tuổi"
+                    position="insideBottom"
+                    offset={-5}
                   />
-                ))}
-              </Pie>
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="max-h-[200px]">
-          <h3 className="mb-2 text-center font-semibold">
-            Thống kê theo nhóm tuổi
-          </h3>
-          <ResponsiveContainer width={"100%"} height={"100%"}>
-            <BarChart data={ageQuery.data}>
-              <XAxis dataKey="nhom_tuoi" name="Nhóm tuổi">
-                <Label value="Nhóm tuổi" position="insideBottom" offset={-5} />
-              </XAxis>
-              <YAxis>
-                <Label
-                  value="Số vé"
-                  angle={-90}
-                  position="insideLeft"
-                  style={{ textAnchor: "middle" }}
+                </XAxis>
+                <YAxis>
+                  <Label
+                    value="Số vé"
+                    angle={-90}
+                    position="insideLeft"
+                    style={{ textAnchor: "middle" }}
+                  />
+                </YAxis>
+                {/* <YAxis /> */}
+                <Tooltip />
+                <Bar
+                  dataKey="so_ve"
+                  name={"Số lượng"}
+                  fill="none"
+                  stroke="#000"
+                  strokeWidth={2}
                 />
-              </YAxis>
-              {/* <YAxis /> */}
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        <div className="h-[300px]">
+          <h3 className="mb-2 text-center font-semibold">Doanh thu</h3>
+          <ResponsiveContainer width="100%" height={"100%"}>
+            <ComposedChart data={orderByDayQuery.data}>
+              <XAxis
+                dataKey="ngay"
+                type="category"
+                interval={0}
+                // padding={{ left: 0, right: 0 }}
+                textAnchor={"end"}
+                angle={-45}
+                height={80}
+              />
+              <YAxis yAxisId="left" />
+              <YAxis yAxisId="right" orientation="right" />
+
               <Tooltip />
-              <Bar dataKey="so_ve" name={"Số lượng"} />
-            </BarChart>
+              <Legend />
+
+              <Bar
+                yAxisId="left"
+                dataKey="so_ve"
+                name="Số vé"
+                barSize={10}
+                fill="none"
+                stroke="#000"
+                strokeWidth={2}
+                alignmentBaseline="left"
+              />
+
+              <Line yAxisId="right" dataKey="doanh_thu" name="Doanh thu" />
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
-      </div>
-      <div className="h-[300px]">
-        <h3 className="mb-2 text-center font-semibold">Doanh thu</h3>
-        <ResponsiveContainer width="100%" height={"100%"}>
-          <ComposedChart data={orderByDayQuery.data}>
-            <XAxis
-              dataKey="ngay"
-              type="category"
-              interval={0}
-              // padding={{ left: 0, right: 0 }}
-              textAnchor={"end"}
-              angle={-45}
-              height={80}
-            />
-            <YAxis yAxisId="left" />
-            <YAxis yAxisId="right" orientation="right" />
-
-            <Tooltip />
-            <Legend />
-
-            <Bar
-              yAxisId="left"
-              dataKey="so_ve"
-              name="Số vé"
-              barSize={30}
-              alignmentBaseline="left"
-            />
-
-            <Line yAxisId="right" dataKey="doanh_thu" name="Doanh thu" />
-          </ComposedChart>
-        </ResponsiveContainer>
       </div>
 
       {/* MANAGER DASH BOARD ORDER */}
-      {}
       <div className="mt-16">
         <div className="flex justify-end mb-4 gap-4">
           <Popover open={open} onOpenChange={setOpen}>
@@ -297,6 +410,9 @@ const ManagerDashboardOrder = ({ eventId }) => {
               }}
             />
           </Field>
+          <Button variant={"outline"} onClick={exportPDF}>
+            Xuất PDF
+          </Button>
         </div>
 
         <TestDataTable

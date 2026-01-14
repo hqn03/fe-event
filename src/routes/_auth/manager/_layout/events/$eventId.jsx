@@ -1,6 +1,7 @@
 import EventForm from "@/components/event-form";
 import ManagerDashboardOrder from "@/components/manager-dashboard";
 import SeatMapCreate from "@/components/seat-map-creat";
+import SeatMapPreview from "@/components/seat-map-preview";
 import SessionForm from "@/components/session-form";
 import TicketForm from "@/components/ticket-form";
 import { getEvent } from "@/services/api";
@@ -38,11 +39,29 @@ function RouteComponent() {
     vi_do: event.vi_do,
   };
 
+  const groupByRow = (seats) => {
+    return seats.reduce((acc, seat) => {
+      const currentRow = acc.get(seat.hang_ghe) || [];
+
+      acc.set(seat.hang_ghe, [...currentRow, seat]);
+
+      return acc;
+    }, new Map());
+  };
+
+  const seatData = groupByRow(event.ghes);
+  console.log(event);
+
   switch (type) {
     case "tickets":
       return <TicketForm event={event} />;
     case "seats":
-      return <SeatMapCreate seatData={event.ghes} />;
+      return event.trang_thai == "NHAP" ? (
+        <SeatMapCreate seatData={event.ghes} />
+      ) : (
+        <SeatMapPreview seatData={seatData} phiens={event.phienSuKiens} />
+        // <SeatMapCreate seatData={event.ghes} />
+      );
     case "sessions":
       return <SessionForm event={event} />;
     case "edit":

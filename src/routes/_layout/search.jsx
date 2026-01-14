@@ -13,7 +13,7 @@ function RouteComponent() {
 
   const { data: events, isLoading } = useQuery({
     initialData: [],
-    queryKey: ["events-search"],
+    queryKey: ["events-search", q, type],
     queryFn: () =>
       api.get(`events/search?q=${q}&type=${type}`).then(({ data }) => data),
   });
@@ -22,7 +22,7 @@ function RouteComponent() {
 
   console.log(events);
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div className="grid grid-cols-12 gap-4 mt-6">
       {events.map((event) => (
         <EventCard
           key={event.ma_su_kien}

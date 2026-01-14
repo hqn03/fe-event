@@ -48,11 +48,15 @@ function RouteComponent() {
     },
     {
       accessorKey: "ten_loai_su_kien",
-      header: "Loai su kien",
+      header: "Danh mục sự kiện",
     },
     {
       accessorKey: "duong_dan",
-      header: "Duong dan",
+      header: "Đường dẫn",
+    },
+    {
+      accessorKey: "mo_ta",
+      header: "Mô tả",
     },
     {
       header: "Hành động",
@@ -106,7 +110,7 @@ function RouteComponent() {
             });
           }}
         >
-          Tạo loại sự kiện
+          Tạo danh mục mới
         </Button>
       </div>
 

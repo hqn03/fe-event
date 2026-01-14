@@ -28,3 +28,10 @@ export const formatDateTime = (date) =>
 export function formatVND(currency) {
   return currency?.toLocaleString("vi-VN");
 }
+
+export function formatVNDCurrency(value) {
+  return Number(value).toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+}

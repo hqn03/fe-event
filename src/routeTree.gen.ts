@@ -31,14 +31,16 @@ import { Route as AuthLayoutMyTicketsRouteImport } from './routes/_auth/_layout/
 import { Route as AuthAdminLayoutIndexRouteImport } from './routes/_auth/admin/_layout/index'
 import { Route as AuthManagerLayoutTicketScannerRouteImport } from './routes/_auth/manager/_layout/ticket-scanner'
 import { Route as AuthManagerLayoutOrdersRouteImport } from './routes/_auth/manager/_layout/orders'
+import { Route as AuthManagerLayoutEventsApprovalRouteImport } from './routes/_auth/manager/_layout/events-approval'
 import { Route as AuthAdminLayoutUsersRouteImport } from './routes/_auth/admin/_layout/users'
-import { Route as AuthAdminLayoutOrdersRouteImport } from './routes/_auth/admin/_layout/orders'
 import { Route as AuthAdminLayoutEventTypesRouteImport } from './routes/_auth/admin/_layout/event-types'
 import { Route as AuthAdminLayoutDashboardRouteImport } from './routes/_auth/admin/_layout/dashboard'
 import { Route as AuthManagerLayoutEventsIndexRouteImport } from './routes/_auth/manager/_layout/events/index'
+import { Route as AuthAdminLayoutOrdersIndexRouteImport } from './routes/_auth/admin/_layout/orders/index'
 import { Route as AuthAdminLayoutEventsIndexRouteImport } from './routes/_auth/admin/_layout/events/index'
 import { Route as AuthManagerLayoutEventsCreateRouteImport } from './routes/_auth/manager/_layout/events/create'
 import { Route as AuthManagerLayoutEventsEventIdRouteImport } from './routes/_auth/manager/_layout/events/$eventId'
+import { Route as AuthAdminLayoutOrdersIdOrderRouteImport } from './routes/_auth/admin/_layout/orders/$idOrder'
 import { Route as AuthAdminLayoutEventsIdRouteImport } from './routes/_auth/admin/_layout/events/$id'
 import { Route as AuthLayoutOrdersIdPaymentRouteImport } from './routes/_auth/_layout/orders/$id/payment'
 
@@ -151,14 +153,15 @@ const AuthManagerLayoutOrdersRoute = AuthManagerLayoutOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AuthManagerLayoutRoute,
 } as any)
+const AuthManagerLayoutEventsApprovalRoute =
+  AuthManagerLayoutEventsApprovalRouteImport.update({
+    id: '/events-approval',
+    path: '/events-approval',
+    getParentRoute: () => AuthManagerLayoutRoute,
+  } as any)
 const AuthAdminLayoutUsersRoute = AuthAdminLayoutUsersRouteImport.update({
   id: '/users',
   path: '/users',
-  getParentRoute: () => AuthAdminLayoutRoute,
-} as any)
-const AuthAdminLayoutOrdersRoute = AuthAdminLayoutOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
   getParentRoute: () => AuthAdminLayoutRoute,
 } as any)
 const AuthAdminLayoutEventTypesRoute =
@@ -179,6 +182,12 @@ const AuthManagerLayoutEventsIndexRoute =
     path: '/events/',
     getParentRoute: () => AuthManagerLayoutRoute,
   } as any)
+const AuthAdminLayoutOrdersIndexRoute =
+  AuthAdminLayoutOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthAdminLayoutRoute,
+  } as any)
 const AuthAdminLayoutEventsIndexRoute =
   AuthAdminLayoutEventsIndexRouteImport.update({
     id: '/events/',
@@ -196,6 +205,12 @@ const AuthManagerLayoutEventsEventIdRoute =
     id: '/events/$eventId',
     path: '/events/$eventId',
     getParentRoute: () => AuthManagerLayoutRoute,
+  } as any)
+const AuthAdminLayoutOrdersIdOrderRoute =
+  AuthAdminLayoutOrdersIdOrderRouteImport.update({
+    id: '/orders/$idOrder',
+    path: '/orders/$idOrder',
+    getParentRoute: () => AuthAdminLayoutRoute,
   } as any)
 const AuthAdminLayoutEventsIdRoute = AuthAdminLayoutEventsIdRouteImport.update({
   id: '/events/$id',
@@ -226,16 +241,18 @@ export interface FileRoutesByFullPath {
   '/manager': typeof AuthManagerLayoutRouteWithChildren
   '/admin/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/admin/event-types': typeof AuthAdminLayoutEventTypesRoute
-  '/admin/orders': typeof AuthAdminLayoutOrdersRoute
   '/admin/users': typeof AuthAdminLayoutUsersRoute
+  '/manager/events-approval': typeof AuthManagerLayoutEventsApprovalRoute
   '/manager/orders': typeof AuthManagerLayoutOrdersRoute
   '/manager/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/admin/': typeof AuthAdminLayoutIndexRoute
   '/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/admin/events/$id': typeof AuthAdminLayoutEventsIdRoute
+  '/admin/orders/$idOrder': typeof AuthAdminLayoutOrdersIdOrderRoute
   '/manager/events/$eventId': typeof AuthManagerLayoutEventsEventIdRoute
   '/manager/events/create': typeof AuthManagerLayoutEventsCreateRoute
   '/admin/events': typeof AuthAdminLayoutEventsIndexRoute
+  '/admin/orders': typeof AuthAdminLayoutOrdersIndexRoute
   '/manager/events': typeof AuthManagerLayoutEventsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -255,15 +272,17 @@ export interface FileRoutesByTo {
   '/manager': typeof AuthManagerLayoutRouteWithChildren
   '/admin/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/admin/event-types': typeof AuthAdminLayoutEventTypesRoute
-  '/admin/orders': typeof AuthAdminLayoutOrdersRoute
   '/admin/users': typeof AuthAdminLayoutUsersRoute
+  '/manager/events-approval': typeof AuthManagerLayoutEventsApprovalRoute
   '/manager/orders': typeof AuthManagerLayoutOrdersRoute
   '/manager/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/admin/events/$id': typeof AuthAdminLayoutEventsIdRoute
+  '/admin/orders/$idOrder': typeof AuthAdminLayoutOrdersIdOrderRoute
   '/manager/events/$eventId': typeof AuthManagerLayoutEventsEventIdRoute
   '/manager/events/create': typeof AuthManagerLayoutEventsCreateRoute
   '/admin/events': typeof AuthAdminLayoutEventsIndexRoute
+  '/admin/orders': typeof AuthAdminLayoutOrdersIndexRoute
   '/manager/events': typeof AuthManagerLayoutEventsIndexRoute
 }
 export interface FileRoutesById {
@@ -289,16 +308,18 @@ export interface FileRoutesById {
   '/_auth/manager/_layout': typeof AuthManagerLayoutRouteWithChildren
   '/_auth/admin/_layout/dashboard': typeof AuthAdminLayoutDashboardRoute
   '/_auth/admin/_layout/event-types': typeof AuthAdminLayoutEventTypesRoute
-  '/_auth/admin/_layout/orders': typeof AuthAdminLayoutOrdersRoute
   '/_auth/admin/_layout/users': typeof AuthAdminLayoutUsersRoute
+  '/_auth/manager/_layout/events-approval': typeof AuthManagerLayoutEventsApprovalRoute
   '/_auth/manager/_layout/orders': typeof AuthManagerLayoutOrdersRoute
   '/_auth/manager/_layout/ticket-scanner': typeof AuthManagerLayoutTicketScannerRoute
   '/_auth/admin/_layout/': typeof AuthAdminLayoutIndexRoute
   '/_auth/_layout/orders/$id/payment': typeof AuthLayoutOrdersIdPaymentRoute
   '/_auth/admin/_layout/events/$id': typeof AuthAdminLayoutEventsIdRoute
+  '/_auth/admin/_layout/orders/$idOrder': typeof AuthAdminLayoutOrdersIdOrderRoute
   '/_auth/manager/_layout/events/$eventId': typeof AuthManagerLayoutEventsEventIdRoute
   '/_auth/manager/_layout/events/create': typeof AuthManagerLayoutEventsCreateRoute
   '/_auth/admin/_layout/events/': typeof AuthAdminLayoutEventsIndexRoute
+  '/_auth/admin/_layout/orders/': typeof AuthAdminLayoutOrdersIndexRoute
   '/_auth/manager/_layout/events/': typeof AuthManagerLayoutEventsIndexRoute
 }
 export interface FileRouteTypes {
@@ -320,16 +341,18 @@ export interface FileRouteTypes {
     | '/manager'
     | '/admin/dashboard'
     | '/admin/event-types'
-    | '/admin/orders'
     | '/admin/users'
+    | '/manager/events-approval'
     | '/manager/orders'
     | '/manager/ticket-scanner'
     | '/admin/'
     | '/orders/$id/payment'
     | '/admin/events/$id'
+    | '/admin/orders/$idOrder'
     | '/manager/events/$eventId'
     | '/manager/events/create'
     | '/admin/events'
+    | '/admin/orders'
     | '/manager/events'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -349,15 +372,17 @@ export interface FileRouteTypes {
     | '/manager'
     | '/admin/dashboard'
     | '/admin/event-types'
-    | '/admin/orders'
     | '/admin/users'
+    | '/manager/events-approval'
     | '/manager/orders'
     | '/manager/ticket-scanner'
     | '/orders/$id/payment'
     | '/admin/events/$id'
+    | '/admin/orders/$idOrder'
     | '/manager/events/$eventId'
     | '/manager/events/create'
     | '/admin/events'
+    | '/admin/orders'
     | '/manager/events'
   id:
     | '__root__'
@@ -382,16 +407,18 @@ export interface FileRouteTypes {
     | '/_auth/manager/_layout'
     | '/_auth/admin/_layout/dashboard'
     | '/_auth/admin/_layout/event-types'
-    | '/_auth/admin/_layout/orders'
     | '/_auth/admin/_layout/users'
+    | '/_auth/manager/_layout/events-approval'
     | '/_auth/manager/_layout/orders'
     | '/_auth/manager/_layout/ticket-scanner'
     | '/_auth/admin/_layout/'
     | '/_auth/_layout/orders/$id/payment'
     | '/_auth/admin/_layout/events/$id'
+    | '/_auth/admin/_layout/orders/$idOrder'
     | '/_auth/manager/_layout/events/$eventId'
     | '/_auth/manager/_layout/events/create'
     | '/_auth/admin/_layout/events/'
+    | '/_auth/admin/_layout/orders/'
     | '/_auth/manager/_layout/events/'
   fileRoutesById: FileRoutesById
 }
@@ -560,18 +587,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManagerLayoutOrdersRouteImport
       parentRoute: typeof AuthManagerLayoutRoute
     }
+    '/_auth/manager/_layout/events-approval': {
+      id: '/_auth/manager/_layout/events-approval'
+      path: '/events-approval'
+      fullPath: '/manager/events-approval'
+      preLoaderRoute: typeof AuthManagerLayoutEventsApprovalRouteImport
+      parentRoute: typeof AuthManagerLayoutRoute
+    }
     '/_auth/admin/_layout/users': {
       id: '/_auth/admin/_layout/users'
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AuthAdminLayoutUsersRouteImport
-      parentRoute: typeof AuthAdminLayoutRoute
-    }
-    '/_auth/admin/_layout/orders': {
-      id: '/_auth/admin/_layout/orders'
-      path: '/orders'
-      fullPath: '/admin/orders'
-      preLoaderRoute: typeof AuthAdminLayoutOrdersRouteImport
       parentRoute: typeof AuthAdminLayoutRoute
     }
     '/_auth/admin/_layout/event-types': {
@@ -595,6 +622,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManagerLayoutEventsIndexRouteImport
       parentRoute: typeof AuthManagerLayoutRoute
     }
+    '/_auth/admin/_layout/orders/': {
+      id: '/_auth/admin/_layout/orders/'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthAdminLayoutOrdersIndexRouteImport
+      parentRoute: typeof AuthAdminLayoutRoute
+    }
     '/_auth/admin/_layout/events/': {
       id: '/_auth/admin/_layout/events/'
       path: '/events'
@@ -615,6 +649,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manager/events/$eventId'
       preLoaderRoute: typeof AuthManagerLayoutEventsEventIdRouteImport
       parentRoute: typeof AuthManagerLayoutRoute
+    }
+    '/_auth/admin/_layout/orders/$idOrder': {
+      id: '/_auth/admin/_layout/orders/$idOrder'
+      path: '/orders/$idOrder'
+      fullPath: '/admin/orders/$idOrder'
+      preLoaderRoute: typeof AuthAdminLayoutOrdersIdOrderRouteImport
+      parentRoute: typeof AuthAdminLayoutRoute
     }
     '/_auth/admin/_layout/events/$id': {
       id: '/_auth/admin/_layout/events/$id'
@@ -654,21 +695,23 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 interface AuthAdminLayoutRouteChildren {
   AuthAdminLayoutDashboardRoute: typeof AuthAdminLayoutDashboardRoute
   AuthAdminLayoutEventTypesRoute: typeof AuthAdminLayoutEventTypesRoute
-  AuthAdminLayoutOrdersRoute: typeof AuthAdminLayoutOrdersRoute
   AuthAdminLayoutUsersRoute: typeof AuthAdminLayoutUsersRoute
   AuthAdminLayoutIndexRoute: typeof AuthAdminLayoutIndexRoute
   AuthAdminLayoutEventsIdRoute: typeof AuthAdminLayoutEventsIdRoute
+  AuthAdminLayoutOrdersIdOrderRoute: typeof AuthAdminLayoutOrdersIdOrderRoute
   AuthAdminLayoutEventsIndexRoute: typeof AuthAdminLayoutEventsIndexRoute
+  AuthAdminLayoutOrdersIndexRoute: typeof AuthAdminLayoutOrdersIndexRoute
 }
 
 const AuthAdminLayoutRouteChildren: AuthAdminLayoutRouteChildren = {
   AuthAdminLayoutDashboardRoute: AuthAdminLayoutDashboardRoute,
   AuthAdminLayoutEventTypesRoute: AuthAdminLayoutEventTypesRoute,
-  AuthAdminLayoutOrdersRoute: AuthAdminLayoutOrdersRoute,
   AuthAdminLayoutUsersRoute: AuthAdminLayoutUsersRoute,
   AuthAdminLayoutIndexRoute: AuthAdminLayoutIndexRoute,
   AuthAdminLayoutEventsIdRoute: AuthAdminLayoutEventsIdRoute,
+  AuthAdminLayoutOrdersIdOrderRoute: AuthAdminLayoutOrdersIdOrderRoute,
   AuthAdminLayoutEventsIndexRoute: AuthAdminLayoutEventsIndexRoute,
+  AuthAdminLayoutOrdersIndexRoute: AuthAdminLayoutOrdersIndexRoute,
 }
 
 const AuthAdminLayoutRouteWithChildren = AuthAdminLayoutRoute._addFileChildren(
@@ -688,6 +731,7 @@ const AuthAdminRouteWithChildren = AuthAdminRoute._addFileChildren(
 )
 
 interface AuthManagerLayoutRouteChildren {
+  AuthManagerLayoutEventsApprovalRoute: typeof AuthManagerLayoutEventsApprovalRoute
   AuthManagerLayoutOrdersRoute: typeof AuthManagerLayoutOrdersRoute
   AuthManagerLayoutTicketScannerRoute: typeof AuthManagerLayoutTicketScannerRoute
   AuthManagerLayoutEventsEventIdRoute: typeof AuthManagerLayoutEventsEventIdRoute
@@ -696,6 +740,7 @@ interface AuthManagerLayoutRouteChildren {
 }
 
 const AuthManagerLayoutRouteChildren: AuthManagerLayoutRouteChildren = {
+  AuthManagerLayoutEventsApprovalRoute: AuthManagerLayoutEventsApprovalRoute,
   AuthManagerLayoutOrdersRoute: AuthManagerLayoutOrdersRoute,
   AuthManagerLayoutTicketScannerRoute: AuthManagerLayoutTicketScannerRoute,
   AuthManagerLayoutEventsEventIdRoute: AuthManagerLayoutEventsEventIdRoute,

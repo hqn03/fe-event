@@ -76,6 +76,50 @@ const useCreatorPage = () => {
     addSeatAction(hang_ghe, seatId, loai, direction);
   };
 
+  const addSeatToRow = (hang_ghe, loai, loai_ghe, gia) => {
+    setSeatData((prev) => {
+      const data = new Map(prev);
+      const seats = data.get(hang_ghe) || [];
+
+      const maxMaGhe = Math.max(
+        0,
+        ...seats.filter((s) => s.loai === "seat").map((s) => Number(s.ma_ghe))
+      );
+
+      const newSeat = {
+        id: v4(),
+        hang_ghe,
+        ma_ghe: (maxMaGhe + 1).toString(),
+        loai,
+        loai_ghe: loai === "seat" ? loai_ghe : "",
+        gia: loai === "seat" ? gia : 0,
+      };
+
+      data.set(hang_ghe, [...seats, newSeat]);
+      return data;
+    });
+  };
+
+  const addNewRow = (name) => {
+    const normalizedInput = name.toLowerCase();
+
+    const existingRow = Array.from(seatData.keys()).some(
+      (hang_ghe) => hang_ghe.toLowerCase() === normalizedInput
+    );
+
+    if (existingRow) {
+      return false;
+    }
+
+    setSeatData((prevSeatData) => {
+      const data = new Map(prevSeatData);
+
+      return data;
+    });
+
+    return true;
+  };
+
   const editSeatName = (hang_ghe, seatId, name) => {
     setSeatData((prev) => {
       const updated = new Map(prev);
@@ -100,6 +144,7 @@ const useCreatorPage = () => {
   };
 
   const editSeat = (editingSeat) => {
+    console.log(editingSeat);
     const { hang_ghe, id, ma_ghe } = editingSeat;
     setSeatData((prev) => {
       const updated = new Map(prev);
@@ -316,6 +361,8 @@ const useCreatorPage = () => {
     togglePreview,
     handleOnDragEnd,
     editSeat,
+    addSeatToRow,
+    addNewRow,
   };
 };
 

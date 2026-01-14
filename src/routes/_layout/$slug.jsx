@@ -104,11 +104,11 @@ function RouteComponent() {
         <Separator className={"my-8"} />
 
         <div className="rounded-lg overflow-hidden">
-          <div className="bg-primary text-white p-4">Loại vé</div>
+          <div className="bg-white border-2 p-4">Loại vé</div>
           {event.phienSuKiens.map((phien) => {
             return (
               <Collapsible key={phien.id_phien_su_kien}>
-                <div className="flex items-center justify-between gap-4 p-4 bg-primary text-white">
+                <div className="flex items-center justify-between gap-4 p-4 bg-white border-2">
                   <CollapsibleTrigger asChild>
                     <Button variant="ghost" size="icon" className="size-8">
                       <ChevronsUpDown />

@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChartColumn, LayoutDashboard, ScanIcon } from "lucide-react";
+import { ChartColumn, File, LayoutDashboard, ScanIcon } from "lucide-react";
 import { Group } from "lucide-react";
 import { CheckCircle } from "lucide-react";
 import { useLocation, useParams } from "@tanstack/react-router";
@@ -29,28 +29,23 @@ const adminNav = [
     icon: Group,
   },
   {
-    title: "Duyet su kien",
+    title: "Duyệt sự kiện",
     url: "/admin/events",
     icon: CheckCircle,
   },
   {
-    title: "Loại sự kiện",
+    title: "Danh mục sự kiện",
     url: "/admin/event-types",
     icon: CheckCircle,
   },
   {
-    title: "Đặt vé",
+    title: "Báo cáo đặt vé",
     url: "/admin/orders",
     icon: ChartColumn,
   },
 ];
 
 const managerNav = [
-  // {
-  //   title: "Dashboard",
-  //   url: "/manager/dashboard",
-  //   icon: IconDashboard,
-  // },
   {
     title: "Sự kiện",
     url: "/manager/events",
@@ -87,6 +82,11 @@ const managerNav = [
     title: "Quét vé",
     url: "/manager/ticket-scanner",
     icon: ScanIcon,
+  },
+  {
+    title: "Lịch sử gửi duyệt",
+    url: "/manager/events-approval",
+    icon: File,
   },
 ];
 
