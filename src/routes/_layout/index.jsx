@@ -1,4 +1,5 @@
 import HeroSection from "@/components/hero-section";
+import { Button } from "@/components/ui/button";
 import { getClientEvents } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -29,9 +30,11 @@ function RouteComponent() {
             <div key={loai_su_kien} className="mt-4">
               <div className="flex mb-4">
                 <div className="flex-1 text-lg font-medium">{loai_su_kien}</div>
-                <div className="flex items-center gap-2">
-                  Xem thêm <ChevronRight />
-                </div>
+                <Link from="/" to={"search"} search={{ type: duong_dan }}>
+                  <Button variant={"link"} className={"cursor-pointer"}>
+                    Xem thêm <ChevronRight />
+                  </Button>
+                </Link>
               </div>
               <div className="grid grid-cols-3 gap-8">
                 {suKiens.map((event) => (

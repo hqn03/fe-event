@@ -1,4 +1,7 @@
+import EventForm from "@/components/event-form";
+import ManagerDashboardOrder from "@/components/manager-dashboard";
 import SeatMapCreate from "@/components/seat-map-creat";
+import SeatMapPreview from "@/components/seat-map-preview";
 import SessionForm from "@/components/session-form";
 import TicketForm from "@/components/ticket-form";
 import { getEvent } from "@/services/api";
@@ -16,20 +19,57 @@ function RouteComponent() {
   const { type } = useSearch({
     from: "/_auth/manager/_layout/events/$eventId",
   });
-  const { data: event = {} } = useQuery({
+  const { data: event, isLoading } = useQuery({
     queryKey: ["event-detail"],
     queryFn: () => getEvent({ id: eventId }),
   });
+
+  if (isLoading) return <p>Loading ...</p>;
+
+  const dataFormEvent = {
+    ma_su_kien: event.ma_su_kien,
+    hinh_anh: event.hinh_anh,
+    id_loai_su_kien: event.id_loai_su_kien,
+    ten_su_kien: event.ten_su_kien,
+    mo_ta: event.mo_ta,
+    ngay_bat_dau: event.ngay_bat_dau,
+    ngay_ket_thuc: event.ngay_ket_thuc,
+    dia_diem: event.dia_diem,
+    kinh_do: event.kinh_do,
+    vi_do: event.vi_do,
+  };
+
+  const groupByRow = (seats) => {
+    return seats.reduce((acc, seat) => {
+      const currentRow = acc.get(seat.hang_ghe) || [];
+
+      acc.set(seat.hang_ghe, [...currentRow, seat]);
+
+      return acc;
+    }, new Map());
+  };
+
+  const seatData = groupByRow(event.ghes);
+  console.log(event);
 
   switch (type) {
     case "tickets":
       return <TicketForm event={event} />;
     case "seats":
-      return <SeatMapCreate seatData={event.ghes} />;
+      return event.trang_thai == "NHAP" ? (
+        <SeatMapCreate seatData={event.ghes} />
+      ) : (
+        <SeatMapPreview seatData={seatData} phiens={event.phienSuKiens} />
+        // <SeatMapCreate seatData={event.ghes} />
+      );
     case "sessions":
       return <SessionForm event={event} />;
+    case "edit":
+      return <EventForm initData={dataFormEvent} />;
+    case "orders":
+      return <ManagerDashboardOrder eventId={eventId} />;
     default:
-      return <div>NOT FOUND</div>;
+      return <div></div>;
   }
 
   // return <h1>COntent</h1>;

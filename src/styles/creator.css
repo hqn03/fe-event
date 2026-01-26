@@ -247,8 +247,8 @@ header input {
 
 .seat.active {
   color: var(--backgroundColor);
-  background-color: var(--stageColor);
-  border-bottom: 5px solid red;
+  background-color: #318f05e0;
+  /* border-bottom: 5px solid red; */
 }
 
 .space {
@@ -285,9 +285,16 @@ header input {
 }
 
 .seat.occupied {
-  opacity: 0.4;
-  pointer-events: none;
+  background-color: #ffd000;
+  cursor: not-allowed;
 }
+
+.seat.booked {
+  background-color: #7a0404;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
 /* End Seat */
 
 /* Legend */

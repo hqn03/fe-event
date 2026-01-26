@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import { Edit } from "lucide-react";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
+import { formatDateTime } from "@/lib/utils";
 
 function SessionForm({ event }) {
   const [phienSuKienOpen, setPhienSuKienOpen] = useState(false);
@@ -43,23 +44,52 @@ function SessionForm({ event }) {
       thoi_gian_dong_dat_ve: new Date(),
     },
     onSubmit: ({ value }) => {
-      api
-        .post(`manager/events/${eventId}/sessions`, value)
-        .then(({ data }) => {
-          queryClient.setQueryData(["sessions"], (prev) => {
-            console.log(prev);
-            return [...prev, data];
+      console.log(value);
+      if (value.id_phien_su_kien) {
+        api
+          .put(`manager/events/${eventId}/sessions`, value)
+          .then(({ data }) => {
+            queryClient.setQueryData(["sessions"], (prev) =>
+              prev.map((s) =>
+                s.id_phien_su_kien === data.id_phien_su_kien ? data : s
+              )
+            );
+            toast.success("Cập phiên sự kiện thành công", {
+              position: "top-center",
+            });
+          })
+          .catch(({ data }) => {
+            toast.error("Cập phiên sự kiện thất bại", {
+              position: "top-center",
+            });
+          })
+          .finally(() => {
+            setIdPhienSuKienEdit("");
+            phienSuKienForm.reset();
+            setPhienSuKienOpen(false);
           });
-          toast.success("Tạo phiên sự kiện thành công", {
-            position: "top-center",
+      } else {
+        api
+          .post(`manager/events/${eventId}/sessions`, value)
+          .then(({ data }) => {
+            queryClient.setQueryData(["sessions"], (prev) => {
+              return [...prev, data];
+            });
+            toast.success("Tạo phiên sự kiện thành công", {
+              position: "top-center",
+            });
+          })
+          .catch(() => {
+            toast.error("Tạo phiên sự kiện thất bại", {
+              position: "top-center",
+            });
+          })
+          .finally(() => {
+            setIdPhienSuKienEdit("");
+            phienSuKienForm.reset();
+            setPhienSuKienOpen(false);
           });
-        })
-        .catch()
-        .finally(() => {
-          setIdPhienSuKienEdit("");
-          phienSuKienForm.reset();
-          setPhienSuKienOpen(false);
-        });
+      }
     },
   });
 
@@ -108,18 +138,18 @@ function SessionForm({ event }) {
         return (
           <div
             key={phienSuKien.id_phien_su_kien}
-            className="flex flex-col gap-2 border rounded-lg p-4 mt-4"
+            className="flex flex-col gap-2 border rounded-lg p-2 mt-4"
           >
             <div className="flex items-center justify-between gap-4 px-4">
               <h4 className=" font-semibold flex-1">
-                {format(phienSuKien.thoi_gian_bat_dau, "HH:mm dd/MM/yyyy")}
+                {formatDateTime(phienSuKien.thoi_gian_bat_dau)} -{" "}
+                {formatDateTime(phienSuKien.thoi_gian_ket_thuc)}
               </h4>
               <Button
                 variant={"outline"}
                 size={"icon"}
                 onClick={(e) => {
                   e.preventDefault();
-                  setIdPhienSuKienEdit(phienSuKien.id_phien_su_kien);
                   handleSetPhienSuKienForm(phienSuKien);
                   setPhienSuKienOpen(true);
                 }}
@@ -148,7 +178,6 @@ function SessionForm({ event }) {
           variant="outline"
           onClick={() => {
             setPhienSuKienOpen(true);
-            phienSuKienForm.setFieldValue("id_phien_su_kien", nanoid());
           }}
         >
           Tạo phiên sự kiện
@@ -166,9 +195,15 @@ function SessionForm({ event }) {
         <form>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Tạo phiên sự kiện</DialogTitle>
+              <DialogTitle>
+                {phienSuKienForm.getFieldValue("id_phien_su_kien")
+                  ? "Cập nhật phiên sự kiện"
+                  : "Tạo phiên sự kiện"}
+              </DialogTitle>
               <DialogDescription>
-                Tạo phiên sự kiện mới, nhấn lưu để tạo.
+                {phienSuKienForm.getFieldValue("id_phien_su_kien")
+                  ? "Cập nhật phiên sự kiện, nhấn lưu để cập nhật."
+                  : "Tạo phiên sự kiện mới, nhấn lưu để tạo."}
               </DialogDescription>
             </DialogHeader>
             <FieldGroup className="grid grid-cols-2 gap-8">
@@ -244,15 +279,10 @@ function SessionForm({ event }) {
             </FieldGroup>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy</Button>
               </DialogClose>
-              <Button
-                type="submit"
-                onClick={() => {
-                  phienSuKienForm.handleSubmit();
-                }}
-              >
-                Save changes
+              <Button type="submit" onClick={phienSuKienForm.handleSubmit}>
+                Lưu
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -1,3 +1,4 @@
+import PdfPreview from "@/components/pdf-preview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,7 +8,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field } from "@/components/ui/field";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
@@ -20,7 +32,7 @@ import {
 } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { Calendar, MapPin, Pin } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Countdown from "react-countdown";
 
 export const Route = createFileRoute("/_auth/_layout/orders/$id/payment")({
@@ -40,26 +52,47 @@ function RouteComponent() {
   const { id } = useParams({});
   const navigate = useNavigate({});
   const [paymentMethod, setPaymentMethod] = useState("VNPAY");
+  const [invoice, setInvoice] = useState(false);
+  const [openInvoice, setOpenInvoive] = useState(false);
 
   const { data: datVe, isLoading } = useQuery({
-    queryKey: ["order"],
-    queryFn: () => api.get(`orders/${id}`).then(({ data }) => data),
+    queryKey: ["order", id],
+    queryFn: () =>
+      api
+        .get(`orders/${id}`)
+        .then(({ data }) => data)
+        .catch((error) => {
+          alert(error.response.data);
+          navigate({ from: "/", to: "/" });
+        }),
   });
 
-  console.log(datVe);
   if (isLoading) return <div>Loading...</div>;
 
   const { phienSuKien, nguoi_dat_ve, chiTietDatVes } = datVe;
 
   const handlePayment = async () => {
+    if (invoice) {
+      setOpenInvoive(true);
+      return;
+    }
+    handleSubmit();
+  };
+
+  const handleSubmit = async () => {
     const { data } = await api.post("payment", {
       ma_don_hang: datVe.ma_don_hang,
       cong_thanh_toan: paymentMethod,
       so_tien: datVe.tong_tien,
       het_han: datVe.het_han,
+      hoa_don: invoice,
     });
 
     window.location.href = data;
+  };
+
+  const handlePreviewPDF = async () => {
+    const { data } = await api.get(`orders/${id}/pdf-preview`);
   };
 
   return (
@@ -92,9 +125,18 @@ function RouteComponent() {
               <CardTitle className={"text-lg"}>Thông tin người đặt</CardTitle>
             </CardHeader>
             <CardContent>
-              <div>{nguoi_dat_ve.nguoi_dung.ho_ten}</div>
-              <div>{nguoi_dat_ve.nguoi_dung.email}</div>
-              <div>{nguoi_dat_ve.nguoi_dung.so_dien_thoai}</div>
+              <div>
+                <span className="font-medium">Họ tên: </span>{" "}
+                {nguoi_dat_ve.nguoi_dung.ho_ten}
+              </div>
+              <div>
+                <span className="font-medium">Email: </span>
+                {nguoi_dat_ve.nguoi_dung.email}
+              </div>
+              <div>
+                <span className="font-medium">SDT: </span>
+                {nguoi_dat_ve.nguoi_dung.so_dien_thoai}
+              </div>
             </CardContent>
           </Card>
 
@@ -129,14 +171,7 @@ function RouteComponent() {
               renderer={renderer}
               onComplete={() => {
                 alert("Het thoi gian thanh toan, don hang se bi huy");
-                navigate({
-                  from: "",
-                  to: "ticket-booking",
-                  search: {
-                    event: phienSuKien.su_kien.ma_su_kien,
-                    session: datVe.id_phien_su_kien,
-                  },
-                });
+                navigate({ from: "/", to: "/" });
               }}
             />
           </Card>
@@ -189,14 +224,49 @@ function RouteComponent() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
-              <Button className={"flex-1"} size={"lg"} onClick={handlePayment}>
+            <CardFooter className={"flex-wrap gap-4"}>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  checked={invoice}
+                  onCheckedChange={setInvoice}
+                  id="invoice"
+                />
+                <Label htmlFor="invoice">Gửi kèm hóa đơn</Label>
+              </div>
+              <Button className={"w-full"} size={"lg"} onClick={handlePayment}>
                 Thanh toán
               </Button>
             </CardFooter>
           </Card>
         </div>
       </div>
+
+      <Dialog open={openInvoice} onOpenChange={setOpenInvoive}>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent className={"min-w-3xl max-h-[90vh]"}>
+          <DialogTitle>Xem trước hóa đơn</DialogTitle>
+          <DialogDescription>
+            <iframe
+              src={`http://localhost:3000/api/orders/${id}/pdf-preview`}
+              className="w-full h-[70vh]"
+            />
+          </DialogDescription>
+
+          {/* <PdfPreview
+                    url={`http://localhost:3000/api/orders/${id}/pdf-preview`}
+                  /> */}
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+            <Button onClick={handleSubmit}>Xác nhận thanh toán</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* <PdfPreview url={`http://localhost:3000/api/orders/${id}/pdf-preview`} /> */}
     </div>
   );
 }

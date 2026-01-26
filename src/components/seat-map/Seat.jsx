@@ -152,7 +152,7 @@ const Seat = ({ seat, rowIndex, addSpace, editSeatName, deleteSeat }) => {
           setEditingSeat(seat);
           // setMenuOpened((prev) => !prev);
         }}
-        title={seat.loai === "seat" ? `${seat.hang_ghe} ${seat.ma_ghe}` : ""}
+        // title={seat.loai === "seat" ? `${seat.hang_ghe} ${seat.ma_ghe}` : ""}
         className={`${seat.loai} ${menuOpened ? "active" : "passive"}`}
       >
         {seat.loai === "seat" && seat.ma_ghe}

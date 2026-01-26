@@ -23,7 +23,15 @@ const defaultValues = {
   translation: { x: 20, y: 20 },
 };
 
-const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
+const Preview = ({ seatData, orderedData = [] }) => {
+  const occupiedSeats = new Map();
+  const bookedSeats = [];
+  orderedData.forEach((item) => {
+    item.trang_thai === "GIU_CHO"
+      ? occupiedSeats.set(item.id_ghe, item.het_han)
+      : bookedSeats.push(item.id_ghe);
+  });
+
   const { event, session } = useSearch({ from: "/_auth/ticket-booking" });
   const { width, height } = useWindowDimensions();
   const queryClient = useQueryClient();
@@ -34,24 +42,6 @@ const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
   const total = useMemo(() => {
     return selectedSeats.reduce((sum, s) => sum + Number(s.gia), 0);
   }, [selectedSeats]);
-
-  const createOrderMutation = useMutation({
-    mutationKey: ["create-order"],
-    mutationFn: (data) => api.post("/orders", data),
-    onSuccess: ({ data }) => {
-      console.log(data);
-    },
-    onError: ({ response }) => {
-      toast.error("Ghế đã được đặt");
-      setSelectedSeats((prev) =>
-        prev.filter((seat) => seat.id !== response.data.seatId)
-      );
-
-      queryClient.setQueryData(["ordered-seats"], (old) => {
-        return [...old, response.data.seatId];
-      });
-    },
-  });
 
   /**
    * Handles the selection of a seat by logging the seat data to the console.
@@ -69,12 +59,22 @@ const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
     });
   };
 
+  const handleSameSeat = (seatId) => {
+    console.log(seatData);
+    setSelectedSeats((prev) => {
+      return prev.filter((s) => s.id !== seatId);
+    });
+  };
+
   const rows = Array.from(seatData?.entries());
+  const onExpire = (id) => {
+    occupiedSeats.delete(id);
+  };
 
   return (
     <div className="grid grid-cols-12">
       <div
-        className="canvas h-[calc(100vh-64px)] relative col-span-9"
+        className="canvas h-[calc(100vh-64px)] relative col-span-8"
         onContextMenu={(e) => e.preventDefault()}
       >
         <MapInteractionCSS
@@ -82,7 +82,7 @@ const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
           value={props}
           minScale={0.7}
           maxScale={1.5}
-          controlsClass="controls"
+          // controlsClass="controls"
           onChange={(val) => setProps(val)}
           btnClass="button circle flex flex-v-center flex-h-center"
           translationBounds={{ xMax: width - 50, yMax: height - 50 }}
@@ -112,7 +112,10 @@ const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
                       key={seat.id}
                       onSelect={() => handleSelect(seat)}
                       selected={selectedSeats.some((s) => s.id === seat.id)}
-                      occupied={orderedData.includes(seat.id)}
+                      occupied={occupiedSeats.has(seat.id)}
+                      booked={bookedSeats.includes(seat.id)}
+                      expiredAt={occupiedSeats.get(seat.id)}
+                      onExpire={onExpire}
                     />
                   );
                 })}
@@ -153,8 +156,13 @@ const Preview = ({ text, seatData, togglePreview, orderedData = [] }) => {
           Tiếp tục
         </Button>
       </div> */}
-      <div className="col-span-3">
-        <Cart eventId={event} sessionId={session} items={selectedSeats} />
+      <div className="col-span-4">
+        <Cart
+          eventId={event}
+          sessionId={session}
+          items={selectedSeats}
+          setItems={handleSameSeat}
+        />
       </div>
     </div>
   );

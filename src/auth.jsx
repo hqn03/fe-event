@@ -17,6 +17,8 @@ export function AuthProvider({ children }) {
       const { access_token, user } = data;
       localStorage.setItem("access_token", access_token);
 
+      console.log(user);
+
       setUser(user);
       return data;
     } catch (error) {
@@ -34,7 +36,7 @@ export function AuthProvider({ children }) {
     if (!accessToken) return;
 
     api
-      .get("auth/me")
+      .get("me")
       .then(({ data }) => setUser(data))
       .catch(() => {
         setUser(null);

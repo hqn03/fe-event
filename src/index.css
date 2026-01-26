@@ -50,7 +50,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  /* --primary: oklch(0.205 0 0); */
+  --primary: #305CDE;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -120,6 +121,13 @@
   }
 }
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 .react-datepicker-wrapper{
   @apply min-w-full!
 }
@@ -129,7 +137,7 @@
 }
 
 #map { 
-    @apply h-72 rounded-xl
+  @apply h-52 rounded-xl
 }
 
 .react-datepicker-popper{

@@ -25,9 +25,11 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEventType, updateEventType } from "@/services/api";
 import { toast } from "sonner";
+import { Textarea } from "./ui/textarea";
 
 const eventTypeSchema = z.object({
   ten_loai_su_kien: z.string().nonempty("Không được để trống"),
+  mo_ta: z.string().nonempty("Không được để trống"),
 });
 
 function EventTypeForm({ initalData, setEditingRecord }) {
@@ -37,11 +39,13 @@ function EventTypeForm({ initalData, setEditingRecord }) {
       id: initalData?.id ?? "",
       ten_loai_su_kien: initalData?.ten_loai_su_kien ?? "",
       duong_dan: initalData?.duong_dan ?? "",
+      mo_ta: initalData?.mo_ta ?? "",
     },
     validators: {
       onSubmit: eventTypeSchema,
     },
     onSubmit: ({ value }) => {
+      console.log(value);
       if (value.id) {
         toast.promise(updateMutation.mutateAsync(value), {
           loading: "Đang lưu",
@@ -93,12 +97,14 @@ function EventTypeForm({ initalData, setEditingRecord }) {
         <FieldGroup>
           <DialogHeader>
             <DialogTitle>
-              {initalData?.id ? "Chỉnh sửa loại sự kiện" : "Tạo loại sự kiện"}
+              {initalData?.id
+                ? "Cập nhật danh mục sự kiện"
+                : "Tạo danh mục sự kiện"}
             </DialogTitle>
             <DialogDescription>
               {initalData?.id
-                ? "Chỉnh sửa thông tin về loại sự kiện. Nhấn lưu để hoàn tất việc chỉnh sửa"
-                : "Tạo loại sự kiện. Nhấn lưu để hoàn tất việc tạo"}
+                ? "Cập nhật danh mục sự kiện. Nhấn lưu để hoàn tất việc cập nhật."
+                : "Tạo danh mục sự kiện. Nhấn lưu để hoàn tất việc tạo."}
             </DialogDescription>
           </DialogHeader>
           <form.Field
@@ -115,6 +121,31 @@ function EventTypeForm({ initalData, setEditingRecord }) {
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
+                  {isInvalid && <FieldError>aâ</FieldError>}
+                </Field>
+              );
+            }}
+          />
+          <form.Field
+            name="mo_ta"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Mô tả</FieldLabel>
+                  <Textarea
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {/* <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  /> */}
                   {isInvalid && <FieldError>aâ</FieldError>}
                 </Field>
               );
@@ -145,9 +176,9 @@ function EventTypeForm({ initalData, setEditingRecord }) {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Hủy</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">Lưu</Button>
           </DialogFooter>
         </FieldGroup>
       </form>

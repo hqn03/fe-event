@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard } from "lucide-react";
+import { ChartColumn, File, LayoutDashboard, ScanIcon } from "lucide-react";
 import { Group } from "lucide-react";
 import { CheckCircle } from "lucide-react";
 import { useLocation, useParams } from "@tanstack/react-router";
@@ -24,24 +24,69 @@ import { useAuth } from "@/auth";
 
 const adminNav = [
   {
-    title: "Dashboard",
-    url: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
     title: "Nguoi dung",
     url: "/admin/users",
     icon: Group,
   },
   {
-    title: "Duyet su kien",
+    title: "Duyệt sự kiện",
     url: "/admin/events",
     icon: CheckCircle,
   },
   {
-    title: "Loại sự kiện",
+    title: "Danh mục sự kiện",
     url: "/admin/event-types",
     icon: CheckCircle,
+  },
+  {
+    title: "Báo cáo đặt vé",
+    url: "/admin/orders",
+    icon: ChartColumn,
+  },
+];
+
+const managerNav = [
+  {
+    title: "Sự kiện",
+    url: "/manager/events",
+    icon: IconListDetails,
+    children: [
+      {
+        title: "Thông tin sự kiện",
+        url: "/manager/events/$eventId",
+        search: { type: "edit" },
+      },
+      {
+        title: "Phiên sự kiện",
+        url: "/manager/events/$eventId",
+        search: { type: "sessions" },
+      },
+      {
+        title: "Vé",
+        url: "/manager/events/$eventId",
+        search: { type: "tickets" },
+      },
+      {
+        title: "Sơ đồ ghế",
+        url: "/manager/events/$eventId",
+        search: { type: "seats" },
+      },
+      {
+        title: "Thống kê",
+        url: "/manager/events/$eventId",
+        search: { type: "orders" },
+      },
+    ],
+  },
+  {
+    title: "Quét vé",
+    url: "/manager/ticket-scanner",
+    icon: ScanIcon,
+  },
+  {
+    title: "Lịch sử gửi duyệt",
+    url: "/manager/events-approval",
+    icon: File,
   },
 ];
 
@@ -49,23 +94,6 @@ export function AppSidebar({ ...props }) {
   const { user } = useAuth();
   const location = useLocation();
 
-  const managerNav = [
-    {
-      title: "Dashboard",
-      url: "/manager/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Events",
-      url: "/manager/events",
-      icon: IconListDetails,
-    },
-    {
-      title: "Orders",
-      url: "/manager/orders",
-      icon: IconListDetails,
-    },
-  ];
   const nav = location.pathname.startsWith("/manager") ? managerNav : adminNav;
 
   return (
@@ -79,7 +107,7 @@ export function AppSidebar({ ...props }) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">NHATEVENT</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

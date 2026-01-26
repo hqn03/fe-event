@@ -24,6 +24,7 @@ function SeatEditingForm({ editSeat }) {
         onSubmit={(e) => {
           e.preventDefault();
           editSeat(editingSeat);
+          setEditingSeat(null);
         }}
       >
         <FieldGroup>

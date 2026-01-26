@@ -44,7 +44,7 @@ export async function login(data) {
 }
 
 export async function getMe(data) {
-  const res = await api.get("auth/me", data);
+  const res = await api.get("/me", data);
   return res.data;
 }
 

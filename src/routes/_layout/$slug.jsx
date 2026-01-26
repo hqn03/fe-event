@@ -63,9 +63,11 @@ function RouteComponent() {
 
   if (isLoading) return <div>Loading....</div>;
 
+  console.log(event);
+
   return (
-    <div>
-      <div className="relative w-full h-96 overflow-hidden my-8">
+    <div className="grid grid-cols-12">
+      <div className="relative col-span-12 h-96 overflow-hidden my-8">
         <img
           src={event.hinh_anh}
           className="relative h-full mx-auto shadow-xl z-10"
@@ -77,7 +79,7 @@ function RouteComponent() {
       </div>
 
       {/* Địa điểm */}
-      <div className="mr-64">
+      <div className="col-span-8">
         <div>
           <div className="text-4xl font-bold mb-8">{event.ten_su_kien}</div>
           <div className="flex gap-2 items-center font-medium">
@@ -94,17 +96,19 @@ function RouteComponent() {
 
         <div>
           <div className="text-xl font-semibold uppercase">Mô tả:</div>
-          <ReactMarkdown>{event.mo_ta}</ReactMarkdown>
+          <div className="prose max-h-[400px] overflow-y-scroll min-w-full">
+            <ReactMarkdown>{event.mo_ta}</ReactMarkdown>
+          </div>
         </div>
 
         <Separator className={"my-8"} />
 
         <div className="rounded-lg overflow-hidden">
-          <div className="bg-primary text-white p-4">Loại vé</div>
+          <div className="bg-white border-2 p-4">Loại vé</div>
           {event.phienSuKiens.map((phien) => {
             return (
               <Collapsible key={phien.id_phien_su_kien}>
-                <div className="flex items-center justify-between gap-4 p-4 bg-primary text-white">
+                <div className="flex items-center justify-between gap-4 p-4 bg-white border-2">
                   <CollapsibleTrigger asChild>
                     <Button variant="ghost" size="icon" className="size-8">
                       <ChevronsUpDown />
@@ -133,7 +137,25 @@ function RouteComponent() {
                   </Button>
                 </div>
                 <CollapsibleContent className="flex flex-col rounded-lg">
-                  {phien.loaiVes.map((ve, index) => (
+                  {event.loaiVes[phien.id_phien_su_kien].map((i, index) => (
+                    <div
+                      key={i.ten_ve}
+                      className={`flex p-4 bg-gray-300 ${
+                        index % 2 || "bg-neutral-200!"
+                      }`}
+                    >
+                      <div className="flex-1">{i.ten_ve}</div>
+                      <div>
+                        <span>
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(i.gia_ve)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  {/* {phien.loaiVes.map((ve, index) => (
                     <div
                       key={ve.ten_loai_ve || ve.ten_ve}
                       className={`flex p-4 ${
@@ -156,7 +178,7 @@ function RouteComponent() {
                         )}
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                 </CollapsibleContent>
               </Collapsible>
             );
@@ -165,7 +187,7 @@ function RouteComponent() {
 
         <Separator className={"my-8"} />
 
-        <div className="max-w-2/3 grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-8">
           <div>
             <div className="text-xl font-semibold mb-1 uppercase">Địa điểm</div>
             <span>{event.dia_diem}</span>

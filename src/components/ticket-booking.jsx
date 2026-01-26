@@ -78,7 +78,7 @@ export default function TicketBooking({ tickets }) {
                 >
                   −
                 </button>
-                <span className="w-10 text-center">{item?.qty || 0}</span>
+                <span className="w-10 text-center">{item?.so_luong || 0}</span>
                 <button
                   onClick={() => updateQty(t.id_loai_ve, +1, t)}
                   className="px-2 border rounded"

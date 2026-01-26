@@ -15,7 +15,7 @@ import { useForm } from "@tanstack/react-form";
 import { Input } from "./ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { createEvent, getEventTypes, signUrl } from "@/services/api";
+import api, { createEvent, getEventTypes, signUrl } from "@/services/api";
 import { useState } from "react";
 import { Image } from "lucide-react";
 import {
@@ -80,35 +80,88 @@ const eventSchema = z
     path: ["ngay_ket_thuc"],
   });
 
+//
+
 function EventForm({ initData }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const form = useForm({
-    defaultValues: {
-      ma_su_kien: "",
-      hinh_anh: "",
-      id_loai_su_kien: "",
-      ten_su_kien: "",
-      mo_ta: "",
-      ngay_bat_dau: "",
-      ngay_ket_thuc: "",
-      dia_diem: "",
-      kinh_do: 0,
-      vi_do: 0,
-    },
+    defaultValues: initData
+      ? { ...initData, id_loai_su_kien: String(initData.id_loai_su_kien) }
+      : {
+          ma_su_kien: "",
+          hinh_anh: "",
+          id_loai_su_kien: "",
+          ten_su_kien: "",
+          mo_ta: `## Giới thiệu sự kiện
+Sự kiện [TEN_SU_KIEN] được tổ chức nhằm [MUC_DICH_SU_KIEN], hướng đến [DOI_TUONG_THAM_GIA], mang lại [GIA_TRI_MANG_LAI].
+
+## Thời gian và địa điểm
+Sự kiện diễn ra từ [THOI_GIAN_BAT_DAU] đến [THOI_GIAN_KET_THUC] tại [DIA_DIEM_TO_CHUC].
+
+## Nội dung chương trình
+Chương trình bao gồm các hoạt động chính như [NOI_DUNG_CHINH], được sắp xếp theo kế hoạch đã định.
+
+## Lịch trình
+Lịch trình dự kiến được triển khai theo các mốc thời gian [LICH_TRINH_CHUONG_TRINH].
+
+## Khách mời
+Sự kiện có sự tham gia của các khách mời gồm [KHACH_MOI].
+
+## Đối tượng tham gia
+Đối tượng tham gia bao gồm [DOI_TUONG_THAM_GIA].
+
+## Thông tin bổ sung
+[THONG_TIN_BO_SUNG]
+`,
+          ngay_bat_dau: "",
+          ngay_ket_thuc: "",
+          dia_diem: "",
+          kinh_do: 0,
+          vi_do: 0,
+        },
     validators: {
       onSubmit: eventSchema,
       onChange: eventSchema,
     },
     onSubmit: ({ value }) => {
-      if (pathname === "/manager/events/create") {
-        toast.promise(creatEventMutation.mutateAsync(value), {
-          loading: "Đang lưu",
-          error: "Thất bại",
-          success: "Tạo sự kiện thành công",
-          position: "top-center",
-        });
+      console.log(value);
+      if (initData) {
+        api
+          .put(`manager/events/${value.ma_su_kien}`, value)
+          .then(({ data }) => {
+            toast.success("Cập nhật thành công", { position: "top-center" });
+            navigate({
+              from: "/",
+              to: "/manager/events/$eventId",
+              params: { eventId: data.ma_su_kien },
+              search: { type: "sessions" },
+            });
+          });
+      } else {
+        api
+          .post("manager/events", value)
+          .then((data) => {
+            toast.promise("Tạo sự kiện thành công", { position: "top-center" });
+            c;
+            console.log(data);
+            // navigate({
+            //   from:"/",
+            //   to:"/"
+            // })
+          })
+          .catch(() => {
+            toast.promise("Tạo sự kiện thất bại", { position: "top-center" });
+          });
       }
+      // if (pathname === "/manager/events/create") {
+      //   toast.promise(creatEventMutation.mutateAsync(value), {
+      //     loading: "Đang lưu",
+      //     error: "Thất bại",
+      //     success: "Tạo sự kiện thành công",
+      //     position: "top-center",
+      //   });
+      // }
     },
   });
 
@@ -305,7 +358,7 @@ function EventForm({ initData }) {
                   <Field>
                     <FieldLabel htmlFor={field.name}>Loại sự kiện</FieldLabel>
                     <Select
-                      value={field.state.value}
+                      value={String(field.state.value)}
                       onValueChange={field.handleChange}
                       aria-invalid={isInvalid}
                     >
@@ -343,7 +396,10 @@ function EventForm({ initData }) {
                       selected={field.state.value}
                       id={field.name}
                       name={field.name}
-                      onChange={field.handleChange}
+                      onChange={(d) => {
+                        d.setHours(0, 0, 0, 0);
+                        field.handleChange(d);
+                      }}
                       dateFormat={"dd/MM/yyyy"}
                       autoComplete="off"
                     />
@@ -370,7 +426,10 @@ function EventForm({ initData }) {
                       selected={field.state.value}
                       id={field.name}
                       name={field.name}
-                      onChange={field.handleChange}
+                      onChange={(d) => {
+                        d.setHours(23, 59, 0, 0);
+                        field.handleChange(d);
+                      }}
                       dateFormat={"dd/MM/yyyy"}
                       autoComplete="off"
                     />
@@ -459,7 +518,7 @@ function EventForm({ initData }) {
                 <Field>
                   <FieldLabel htmlFor={field.name}>Mô tả</FieldLabel>
                   <MDXEditor
-                    className={`prose border rounded-lg min-w-full`}
+                    className={`prose border rounded-lg min-w-full max-h-[400px] overflow-scroll`}
                     markdown={description.current}
                     onChange={(v) => (description.current = v)}
                     plugins={[

@@ -7,17 +7,19 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { formatDateTime } from "@/lib/utils";
 import { getEventApprovals, updateEventApproval } from "@/services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_auth/admin/_layout/events")({
+export const Route = createFileRoute("/_auth/admin/_layout/events/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate({});
   const [id, setId] = useState("");
   const { data: eventApprovals = [], isLoading } = useQuery({
     queryKey: ["event-approvals"],
@@ -42,7 +44,10 @@ function RouteComponent() {
     },
     {
       accessorKey: "ngay_tao",
-      header: "Ngày gửi",
+      header: "Ngày gửi yêu cầu",
+      cell: ({ row }) => {
+        return <div>{formatDateTime(row.getValue("ngay_tao"))}</div>;
+      },
     },
     {
       header: "Hành động",
@@ -50,7 +55,12 @@ function RouteComponent() {
         const id = row.original.id_su_kien_phe_duyet;
         return (
           <div className="flex items-center gap-2">
+            <Link to={row.original.ma_su_kien}>
+              <Button variant={"link"}>Xem</Button>
+            </Link>
             <Button
+              className={"text-green-600"}
+              variant={"link"}
               onClick={() => {
                 if (confirm(`Xác nhận duyệt ${row.original.ma_su_kien}`)) {
                   toast.promise(
@@ -70,7 +80,13 @@ function RouteComponent() {
             >
               Duyệt
             </Button>
-            <Button onClick={() => setId(id)}>Từ chối</Button>
+            <Button
+              variant={"link"}
+              className={"text-destructive"}
+              onClick={() => setId(id)}
+            >
+              Từ chối
+            </Button>
           </div>
         );
       },
@@ -88,8 +104,8 @@ function RouteComponent() {
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Từ chối đăng sự kiện</DialogTitle>
-          <DialogDescription>Nhập lý do từ chối sự kiện</DialogDescription>
+          <DialogTitle>Từ chối phê duyệt</DialogTitle>
+          <DialogDescription>Nhập lý do từ chối phê duyệt</DialogDescription>
           <RejectForm id={id} setId={setId} />
         </DialogContent>
       </Dialog>
